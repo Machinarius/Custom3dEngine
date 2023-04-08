@@ -1,7 +1,8 @@
 namespace Machinarius.Custom3dEngine.GLAbstractions;
 
-public interface IMesh {
+public interface IMesh : IDisposable {
   VertexAttributeDescriptor[] Attributes { get; }
   float[] Vertices { get; }
   uint[] Indices { get; }
+  void ConfigureUniforms();
 }

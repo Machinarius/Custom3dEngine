@@ -14,19 +14,17 @@ public class Program {
     var options = WindowOptions.Default;
     options.Title = "My 3d engine";
 
-    BufferedMesh? quadMesh = null;
-    ShaderProgram? shaders = null;
-    Simple2DTexture? texture = null;
+    IMesh? meshData = null;
+    BufferedMesh? bufferedMesh = null;
 
     using var window = Window.Create(options);
     window.Load += () => {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
 
-      quadMesh = new BufferedMesh(glContext, new QuadWithTextureCoordinates());
-      quadMesh.ActivateVertexAttributes();
-      shaders = new ShaderProgram(glContext, "IdentityWithUv.vert", "BasicTextureWithAlphaDiscard.frag");
-      texture = new Simple2DTexture(glContext, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "silk.png"));
+      meshData =  new QuadWithColorData(glContext);
+      bufferedMesh = new BufferedMesh(glContext, meshData);
+      bufferedMesh.ActivateVertexAttributes();
     };
 
     window.FramebufferResize += size => {
@@ -37,13 +35,8 @@ public class Program {
       glContext?.ClearColor(System.Drawing.Color.Wheat);
       glContext?.Clear(ClearBufferMask.ColorBufferBit);
 
-      quadMesh?.VertexArray.Bind();
-      shaders?.Use();
-
-      texture?.Bind(TextureUnit.Texture0);
-      shaders?.SetUniform("uTexture", 0);
-
-      quadMesh?.Draw();
+      bufferedMesh?.VertexArray.Bind();
+      bufferedMesh?.Draw();
 
       if (!ShouldGameStillRun(inputContext)) {
         window.Close();
@@ -51,8 +44,8 @@ public class Program {
     };
 
     window.Closing += () => {
-      quadMesh?.Dispose();
-      shaders?.Dispose();
+      bufferedMesh?.Dispose();
+      meshData?.Dispose();
 
       glContext?.Dispose();
       inputContext?.Dispose();

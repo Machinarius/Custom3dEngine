@@ -4,6 +4,13 @@ using Silk.NET.OpenGL;
 namespace Machinarius.Custom3dEngine.Meshes;
 
 public class QuadWithTextureCoordinates : IMesh {
+  private readonly ShaderProgram shaders;
+  private readonly Simple2DTexture texture;
+
+  private const string vertexShaderName = "IdentityWithUv.vert";
+
+  private const string fragmentShaderName = "BasicTextureWithAlphaDiscard.frag";
+
   public VertexAttributeDescriptor[] Attributes => new [] {
     // 3 floats for XYZ coordinates every 5 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 5, 0),
@@ -23,4 +30,20 @@ public class QuadWithTextureCoordinates : IMesh {
     0, 1, 3,
     1, 2, 3
   };
+
+  public QuadWithTextureCoordinates(GL gl) {
+    shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
+    texture = new Simple2DTexture(gl, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "silk.png"));
+  }
+
+  public void ConfigureUniforms() {
+    texture.Bind(TextureUnit.Texture0);
+    shaders.Use();
+    shaders.SetUniform("uTexture", 0);
+  }
+
+  public void Dispose() {
+    shaders.Dispose();
+    texture.Dispose();
+  }
 }
