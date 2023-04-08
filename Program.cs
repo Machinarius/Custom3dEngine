@@ -23,7 +23,7 @@ public class Program {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
 
-      quadMesh = new BufferedMesh(glContext, new Quad());
+      quadMesh = new BufferedMesh(glContext, new QuadWithColorData());
       shaders = new ShaderProgram(glContext, "IdentityWithColor.vert", "ArgumentColor.frag");
       quadMesh.ActivateVertexAttributes();
     };
