@@ -7,7 +7,7 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
   private readonly BufferTargetARB bufferType;
   private readonly GL gl;
 
-  public BufferObject(GL gl, BufferTargetARB bufferType, Span<TDataType> data) {
+  public BufferObject(GL gl, BufferTargetARB bufferType, ReadOnlySpan<TDataType> data) {
     this.gl = gl;
     this.bufferType = bufferType;
 
@@ -16,7 +16,7 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
     UploadDataToBuffer(data);
   }
 
-  private unsafe void UploadDataToBuffer(Span<TDataType> data) {
+  private unsafe void UploadDataToBuffer(ReadOnlySpan<TDataType> data) {
     fixed (void* rawData = data) {
       gl.BufferData(bufferType, (nuint) (data.Length * sizeof(TDataType)), rawData, BufferUsageARB.StaticDraw);
     }

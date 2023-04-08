@@ -24,8 +24,8 @@ public class Program {
       inputContext = window.CreateInput();
 
       quadMesh = new BufferedMesh(glContext, new QuadWithColorData());
-      shaders = new ShaderProgram(glContext, "IdentityWithColor.vert", "ArgumentColor.frag");
       quadMesh.ActivateVertexAttributes();
+      shaders = new ShaderProgram(glContext, "IdentityWithColor.vert", "ArgumentColor.frag");
     };
 
     window.FramebufferResize += size => {
