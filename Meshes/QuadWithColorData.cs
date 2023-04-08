@@ -34,7 +34,7 @@ public class QuadWithColorData : IMesh {
     shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
   }
 
-  public void ConfigureUniforms() {
+  public void PrepareForDrawing() {
     shaders.Use();
     shaders.SetUniform("uBlue", (float) Math.Sin(DateTime.Now.Millisecond / 1000f * Math.PI));
   }

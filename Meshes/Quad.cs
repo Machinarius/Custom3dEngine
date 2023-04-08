@@ -34,7 +34,7 @@ public class Quad : IMesh {
     shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
   }
 
-  public void ConfigureUniforms() {
+  public void PrepareForDrawing() {
     shaders.Use();
     // This simple quad has no uniforms
   }

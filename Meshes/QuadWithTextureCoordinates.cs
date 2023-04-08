@@ -36,7 +36,7 @@ public class QuadWithTextureCoordinates : IMesh {
     texture = new Simple2DTexture(gl, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "silk.png"));
   }
 
-  public void ConfigureUniforms() {
+  public void PrepareForDrawing() {
     texture.Bind(TextureUnit.Texture0);
     shaders.Use();
     shaders.SetUniform("uTexture", 0);
