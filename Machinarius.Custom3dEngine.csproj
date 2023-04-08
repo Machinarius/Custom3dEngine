@@ -13,10 +13,12 @@
     <PackageReference Include="Silk.NET.Input" Version="2.17.0" />
     <PackageReference Include="Silk.NET.Maths" Version="2.17.0" />
     <PackageReference Include="Silk.NET.OpenGL" Version="2.17.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Shaders\*.vert" CopyToOutputDirectory="Always" LinkBase="Shaders\" />
     <None Include="Shaders\*.frag" CopyToOutputDirectory="Always" LinkBase="Shaders\" />
+    <None Include="Assets\**" CopyToOutputDirectory="Always" />
   </ItemGroup>
 </Project>

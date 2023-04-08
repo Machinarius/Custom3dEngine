@@ -1,6 +1,5 @@
 ﻿using Machinarius.Custom3dEngine.GLAbstractions;
 using Machinarius.Custom3dEngine.Meshes;
-using Machinarius.Custom3dEngine.Shaders;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
@@ -17,15 +16,17 @@ public class Program {
 
     BufferedMesh? quadMesh = null;
     ShaderProgram? shaders = null;
+    Simple2DTexture? texture = null;
 
     using var window = Window.Create(options);
     window.Load += () => {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
 
-      quadMesh = new BufferedMesh(glContext, new QuadWithColorData());
+      quadMesh = new BufferedMesh(glContext, new QuadWithTextureCoordinates());
       quadMesh.ActivateVertexAttributes();
-      shaders = new ShaderProgram(glContext, "IdentityWithColor.vert", "ArgumentColor.frag");
+      shaders = new ShaderProgram(glContext, "IdentityWithUv.vert", "BasicTextureWithAlphaDiscard.frag");
+      texture = new Simple2DTexture(glContext, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "silk.png"));
     };
 
     window.FramebufferResize += size => {
@@ -38,7 +39,9 @@ public class Program {
 
       quadMesh?.VertexArray.Bind();
       shaders?.Use();
-      shaders?.SetUniform("uBlue", (float)Math.Sin(DateTime.Now.Millisecond / 1000f * Math.PI));
+
+      texture?.Bind(TextureUnit.Texture0);
+      shaders?.SetUniform("uTexture", 0);
 
       quadMesh?.Draw();
 
