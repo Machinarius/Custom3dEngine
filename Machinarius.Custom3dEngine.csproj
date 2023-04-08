@@ -5,6 +5,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,4 +15,8 @@
     <PackageReference Include="Silk.NET.OpenGL" Version="2.17.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Shaders\*.vert" CopyToOutputDirectory="Always" LinkBase="Shaders\" />
+    <None Include="Shaders\*.frag" CopyToOutputDirectory="Always" LinkBase="Shaders\" />
+  </ItemGroup>
 </Project>
