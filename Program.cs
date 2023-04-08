@@ -56,6 +56,9 @@ public class Program {
     };
 
     window.Closing += () => {
+      uploadedQuad?.Destroy(glContext);
+      glContext?.DeleteProgram(shaderProgramId);
+
       glContext?.Dispose();
       inputContext?.Dispose();
     };

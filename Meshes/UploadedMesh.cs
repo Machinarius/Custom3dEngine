@@ -1,3 +1,5 @@
+using Silk.NET.OpenGL;
+
 namespace Machinarius.Custom3dEngine.Meshes;
 
 public class UploadedMesh {
@@ -17,5 +19,11 @@ public class UploadedMesh {
     VertexArrayObjectId = vertexArrayObjectId;
     VertexBufferObjectId = vertexBufferObjectId;
     ElementBufferObjectId = elementBufferObjectId;
+  }
+
+  public void Destroy(GL? gl) {
+    gl?.DeleteBuffer(VertexBufferObjectId);
+    gl?.DeleteBuffer(ElementBufferObjectId);
+    gl?.DeleteVertexArray(VertexArrayObjectId);
   }
 }
