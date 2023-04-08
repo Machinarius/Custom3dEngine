@@ -1,4 +1,5 @@
-﻿using Machinarius.Custom3dEngine.Meshes;
+﻿using Machinarius.Custom3dEngine.GLAbstractions;
+using Machinarius.Custom3dEngine.Meshes;
 using Machinarius.Custom3dEngine.Shaders;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
@@ -14,21 +15,17 @@ public class Program {
     var options = WindowOptions.Default;
     options.Title = "My 3d engine";
 
-    UploadedMesh? uploadedQuad = null;
-    uint shaderProgramId = 0;
+    BufferedMesh? quadMesh = null;
+    ShaderProgram? shaders = null;
 
     using var window = Window.Create(options);
     window.Load += () => {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
 
-      uploadedQuad = MeshUploader.UploadMeshDataToGpu(glContext, new Quad());
-      shaderProgramId = ProgramFactory.FromShaderFiles(glContext, "IdentityVertex.vert", "MediumBlue.frag");
-
-      unsafe {
-        glContext.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), null);
-      }
-      glContext.EnableVertexAttribArray(0);
+      quadMesh = new BufferedMesh(glContext, new Quad());
+      shaders = new ShaderProgram(glContext, "IdentityWithColor.vert", "ArgumentColor.frag");
+      quadMesh.ActivateVertexAttributes();
     };
 
     window.FramebufferResize += size => {
@@ -39,16 +36,11 @@ public class Program {
       glContext?.ClearColor(System.Drawing.Color.Wheat);
       glContext?.Clear(ClearBufferMask.ColorBufferBit);
 
-      if (uploadedQuad == null) {
-        throw new InvalidOperationException("The Quad mesh has not been uploaded to the GPU yet!");
-      }
+      quadMesh?.VertexArray.Bind();
+      shaders?.Use();
+      shaders?.SetUniform("uBlue", (float)Math.Sin(DateTime.Now.Millisecond / 1000f * Math.PI));
 
-      glContext?.BindVertexArray(uploadedQuad.VertexArrayObjectId);
-      glContext?.UseProgram(shaderProgramId);
-
-      unsafe {
-        glContext?.DrawElements(PrimitiveType.Triangles, (uint) uploadedQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
-      }
+      quadMesh?.Draw();
 
       if (!ShouldGameStillRun(inputContext)) {
         window.Close();
@@ -56,8 +48,8 @@ public class Program {
     };
 
     window.Closing += () => {
-      uploadedQuad?.Destroy(glContext);
-      glContext?.DeleteProgram(shaderProgramId);
+      quadMesh?.Dispose();
+      shaders?.Dispose();
 
       glContext?.Dispose();
       inputContext?.Dispose();
