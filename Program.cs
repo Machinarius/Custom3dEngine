@@ -3,6 +3,7 @@ using Machinarius.Custom3dEngine.Meshes;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
+using System.Numerics;
 
 namespace Machinarius.Custom3dEngine;
 
@@ -22,9 +23,13 @@ public class Program {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
 
-      meshData =  new QuadWithColorData(glContext);
+      meshData =  new QuadWithTextureCoordinates(glContext);
       bufferedMesh = new BufferedMesh(glContext, meshData);
       bufferedMesh.ActivateVertexAttributes();
+
+      meshData.Transformation = new Transformation {
+        Scale = 0.3f
+      };
     };
 
     window.FramebufferResize += size => {

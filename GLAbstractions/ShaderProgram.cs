@@ -1,4 +1,6 @@
+using Silk.NET.Maths;
 using Silk.NET.OpenGL;
+using System.Numerics;
 
 namespace Machinarius.Custom3dEngine.GLAbstractions;
 
@@ -40,6 +42,19 @@ public class ShaderProgram : IDisposable {
 
   public void SetUniform(string name, float value) {
     gl.Uniform1(GetUniformLocation(name), value);
+  }
+
+  public unsafe void SetUniform(string name, Matrix4x4 value) {
+    gl.UniformMatrix4(GetUniformLocation(name), 1, false, (float*) &value);
+    var error = gl.GetError();
+    if (error != GLEnum.NoError) {
+      throw new InvalidOperationException($"Could not set a M4x4 uniform value for name '{name}'\n{error}");
+    }
+  }
+
+  public bool HasUniform(string name) {
+    var location = gl.GetUniformLocation(handle, name);
+    return location > -1;
   }
 
   public void Dispose() {
