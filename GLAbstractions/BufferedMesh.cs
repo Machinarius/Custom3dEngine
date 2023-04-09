@@ -29,8 +29,7 @@ public class BufferedMesh : IDisposable {
   }
 
   public unsafe void Draw() {
-    SourceMesh.PrepareForDrawing();
-    gl.DrawElements(PrimitiveType.Triangles, (uint) SourceMesh.Indices.Length, DrawElementsType.UnsignedInt, null);
+    SourceMesh.Draw();
   }
 
   public void Dispose() {

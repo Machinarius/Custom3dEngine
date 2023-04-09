@@ -32,14 +32,18 @@ public class QuadWithColorData : BaseMesh {
   public override Transformation? Transformation { get; set; }
   protected override ShaderProgram Shaders { get; }
 
+  private readonly GL gl;
+
   public QuadWithColorData(GL gl) {
+    this.gl = gl;
     Shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
   }
 
-  public override void PrepareForDrawing() {
+  public unsafe override void Draw() {
     Shaders.Use();
     ApplyTransformationIfNeeded();
     Shaders.SetUniform("uBlue", (float) Math.Sin(DateTime.Now.Millisecond / 1000f * Math.PI));
+    gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 
   public override void Dispose() {

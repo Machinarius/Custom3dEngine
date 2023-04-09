@@ -23,9 +23,15 @@ public class Program {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
 
-      meshData =  new QuadWithTextureCoordinates(glContext);
+      glContext.Enable(GLEnum.DepthTest);
+
+      meshData =  new CubeMesh(glContext);
       bufferedMesh = new BufferedMesh(glContext, meshData);
       bufferedMesh.ActivateVertexAttributes();
+      
+      meshData.Transformation = new Transformation {
+        Rotation = Quaternion.CreateFromYawPitchRoll(2f, 1f, 3f)
+      };
     };
 
     window.FramebufferResize += size => {
@@ -34,7 +40,7 @@ public class Program {
 
     window.Render += deltaTime => {
       glContext?.ClearColor(System.Drawing.Color.Wheat);
-      glContext?.Clear(ClearBufferMask.ColorBufferBit);
+      glContext?.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       bufferedMesh?.VertexArray.Bind();
       bufferedMesh?.Draw();

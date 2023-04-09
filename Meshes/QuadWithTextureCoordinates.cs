@@ -32,16 +32,20 @@ public class QuadWithTextureCoordinates : BaseMesh {
   public override Transformation? Transformation { get; set; }
   protected override ShaderProgram Shaders { get; }
 
+  private readonly GL gl;
+
   public QuadWithTextureCoordinates(GL gl) {
+    this.gl = gl;
     Shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
     texture = new Simple2DTexture(gl, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "silk.png"));
   }
 
-  public override void PrepareForDrawing() {
+  public unsafe override void Draw() {
     texture.Bind(TextureUnit.Texture0);
     Shaders.Use();
     Shaders.SetUniform("uTexture", 0);
     ApplyTransformationIfNeeded();
+    gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 
   public override void Dispose() {

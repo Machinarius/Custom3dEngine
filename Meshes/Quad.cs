@@ -31,14 +31,18 @@ public class Quad : BaseMesh {
   public override Transformation? Transformation { get; set; }
   protected override ShaderProgram Shaders { get; }
 
+  private readonly GL gl;
+
   public Quad(GL gl) {
+    this.gl = gl;
     Shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
   }
 
-  public override void PrepareForDrawing() {
+  public unsafe override void Draw() {
     Shaders.Use();
     ApplyTransformationIfNeeded();
     // This simple quad has no uniforms
+    gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 
   public override void Dispose() {
