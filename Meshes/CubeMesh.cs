@@ -17,7 +17,7 @@ public class CubeMesh : BaseMesh {
     // 3 floats for XYZ coordinates every 5 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 5, 0),
     // 2 floats for UV coordinates every 5 elements, starting from the third element
-    new VertexAttributeDescriptor(4, VertexAttribPointerType.Float, 5, 3),
+    new VertexAttributeDescriptor(2, VertexAttribPointerType.Float, 5, 3),
   };
 
   public override float[] Vertices => new [] {
@@ -82,7 +82,7 @@ public class CubeMesh : BaseMesh {
     this.camera = camera;
 
     Shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
-    texture = new Simple2DTexture(gl, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "silk.png"));
+    texture = new Simple2DTexture(gl, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "wooden_crate.jpg"));
   }
 
   public override void Dispose() {
