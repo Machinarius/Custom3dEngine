@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace Machinarius.Custom3dEngine.Entities;
 
-public class Camera {
+public class Camera : IDisposable {
   private const float LookSensitivity = 0.1f;
   private const float MoveSpeed = 2.5f;
 
@@ -110,5 +110,12 @@ public class Camera {
       MathF.Sin(MathHelper.DegreesToRadians(Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Pitch))
     );
     Front = Vector3.Normalize(Direction);
+  }
+
+  public void Dispose() {
+    if (primaryMouse != null) {
+      primaryMouse.MouseMove -= OnMouseMove;
+      primaryMouse.Scroll -= OnMouseScroll;
+    }
   }
 }
