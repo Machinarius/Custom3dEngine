@@ -76,6 +76,14 @@ public class Camera {
     if (primaryKeyboard.IsKeyPressed(Key.D)) {
       Position += Vector3.Normalize(Vector3.Cross(Front, Up)) * displacement;
     }
+
+    if (primaryKeyboard.IsKeyPressed(Key.Space)) {
+      Position += displacement * Up;
+    }
+
+    if (primaryKeyboard.IsKeyPressed(Key.ControlLeft)) {
+      Position -= displacement * Up;
+    }
   }
 
   private void OnMouseScroll(IMouse mouse, ScrollWheel wheel) {
