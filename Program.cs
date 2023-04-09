@@ -18,16 +18,16 @@ public class Program {
 
     IMesh? meshData = null;
     BufferedMesh? bufferedMesh = null;
+    Camera? camera = null;
 
     using var window = Window.Create(options);
-    var camera = new Camera(window);
-
     window.Load += () => {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
 
       glContext.Enable(GLEnum.DepthTest);
 
+      camera = new Camera(window, inputContext);
       meshData =  new CubeMesh(glContext, camera);
       bufferedMesh = new BufferedMesh(glContext, meshData);
       bufferedMesh.ActivateVertexAttributes();
@@ -39,6 +39,10 @@ public class Program {
 
     window.FramebufferResize += size => {
       glContext?.Viewport(size);
+    };
+
+    window.Update += deltaTime => {
+      camera?.Update(deltaTime);
     };
 
     window.Render += deltaTime => {
