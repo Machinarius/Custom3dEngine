@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace Machinarius.Custom3dEngine.Meshes;
 
-public class CubeMesh : BaseMesh {
+public class CubeWithTextureData : BaseMesh {
   private readonly Simple2DTexture texture;
 
   private const string vertexShaderName = "IdentityWithMVPAndUv.vert";
@@ -77,7 +77,7 @@ public class CubeMesh : BaseMesh {
   private readonly GL gl;
   private readonly Camera camera;
 
-  public CubeMesh(GL gl, Camera camera) {
+  public CubeWithTextureData(GL gl, Camera camera) {
     this.gl = gl;
     this.camera = camera;
 

@@ -28,7 +28,7 @@ public class Program {
       glContext.Enable(GLEnum.DepthTest);
 
       camera = new Camera(window, inputContext);
-      meshData =  new CubeMesh(glContext, camera);
+      meshData =  new CubeWithTextureData(glContext, camera);
       bufferedMesh = new BufferedMesh(glContext, meshData);
       bufferedMesh.ActivateVertexAttributes();
       
@@ -46,7 +46,7 @@ public class Program {
     };
 
     window.Render += deltaTime => {
-      glContext?.ClearColor(System.Drawing.Color.Wheat);
+      glContext?.ClearColor(System.Drawing.Color.Black);
       glContext?.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       bufferedMesh?.VertexArray.Bind();
@@ -58,6 +58,7 @@ public class Program {
     };
 
     window.Closing += () => {
+      camera?.Dispose();
       bufferedMesh?.Dispose();
       meshData?.Dispose();
 
