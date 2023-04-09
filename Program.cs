@@ -1,4 +1,5 @@
-﻿using Machinarius.Custom3dEngine.GLAbstractions;
+﻿using Machinarius.Custom3dEngine.Entities;
+using Machinarius.Custom3dEngine.GLAbstractions;
 using Machinarius.Custom3dEngine.Meshes;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
@@ -19,13 +20,15 @@ public class Program {
     BufferedMesh? bufferedMesh = null;
 
     using var window = Window.Create(options);
+    var camera = new Camera(window);
+
     window.Load += () => {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
 
       glContext.Enable(GLEnum.DepthTest);
 
-      meshData =  new CubeMesh(glContext);
+      meshData =  new CubeMesh(glContext, camera);
       bufferedMesh = new BufferedMesh(glContext, meshData);
       bufferedMesh.ActivateVertexAttributes();
       
@@ -43,7 +46,7 @@ public class Program {
       glContext?.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       bufferedMesh?.VertexArray.Bind();
-      bufferedMesh?.Draw();
+      bufferedMesh?.Draw(deltaTime, window.Time);
 
       if (!ShouldGameStillRun(inputContext)) {
         window.Close();

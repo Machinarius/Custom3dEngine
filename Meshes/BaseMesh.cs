@@ -15,7 +15,7 @@ public abstract class BaseMesh : IMesh {
 
   protected abstract ShaderProgram Shaders { get; }
 
-  public abstract void Draw();
+  public abstract void Draw(double deltaTime, double absoluteTime);
 
   protected void ApplyTransformationIfNeeded() {
     if (!Shaders.HasUniform("uModelMatrix")) {

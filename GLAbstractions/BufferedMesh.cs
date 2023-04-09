@@ -28,8 +28,8 @@ public class BufferedMesh : IDisposable {
     }
   }
 
-  public unsafe void Draw() {
-    SourceMesh.Draw();
+  public unsafe void Draw(double deltaTime, double absoluteTime) {
+    SourceMesh.Draw(deltaTime, absoluteTime);
   }
 
   public void Dispose() {

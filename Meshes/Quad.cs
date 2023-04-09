@@ -38,7 +38,7 @@ public class Quad : BaseMesh {
     Shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
   }
 
-  public unsafe override void Draw() {
+  public unsafe override void Draw(double deltaTime, double absoluteTime) {
     Shaders.Use();
     ApplyTransformationIfNeeded();
     // This simple quad has no uniforms

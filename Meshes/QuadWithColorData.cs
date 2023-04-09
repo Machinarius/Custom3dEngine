@@ -39,7 +39,7 @@ public class QuadWithColorData : BaseMesh {
     Shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
   }
 
-  public unsafe override void Draw() {
+  public unsafe override void Draw(double deltaTime, double absoluteTime) {
     Shaders.Use();
     ApplyTransformationIfNeeded();
     Shaders.SetUniform("uBlue", (float) Math.Sin(DateTime.Now.Millisecond / 1000f * Math.PI));

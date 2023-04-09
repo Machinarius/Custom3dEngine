@@ -40,7 +40,7 @@ public class QuadWithTextureCoordinates : BaseMesh {
     texture = new Simple2DTexture(gl, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "silk.png"));
   }
 
-  public unsafe override void Draw() {
+  public unsafe override void Draw(double deltaTime, double absoluteTime) {
     texture.Bind(TextureUnit.Texture0);
     Shaders.Use();
     Shaders.SetUniform("uTexture", 0);
