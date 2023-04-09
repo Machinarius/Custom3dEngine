@@ -26,10 +26,6 @@ public class Program {
       meshData =  new QuadWithTextureCoordinates(glContext);
       bufferedMesh = new BufferedMesh(glContext, meshData);
       bufferedMesh.ActivateVertexAttributes();
-
-      meshData.Transformation = new Transformation {
-        Scale = 0.3f
-      };
     };
 
     window.FramebufferResize += size => {

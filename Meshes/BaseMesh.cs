@@ -1,4 +1,5 @@
 using Machinarius.Custom3dEngine.GLAbstractions;
+using System.Numerics;
 
 namespace Machinarius.Custom3dEngine.Meshes;
 
@@ -17,14 +18,11 @@ public abstract class BaseMesh : IMesh {
   public abstract void PrepareForDrawing();
 
   protected void ApplyTransformationIfNeeded() {
-    if (Transformation == null) {
-      return;
-    }
-
     if (!Shaders.HasUniform("uModelMatrix")) {
       throw new InvalidOperationException($"Cannot apply transformations to this '{GetType().Name}' mesh, the 'uModelMatrix' uniform is not present in the shader");
     }
 
-    Shaders.SetUniform("uModelMatrix", Transformation.ViewMatrix);
+    var viewMatrix = Transformation?.ViewMatrix ?? Matrix4x4.Identity;
+    Shaders.SetUniform("uModelMatrix", viewMatrix);
   }
 }
