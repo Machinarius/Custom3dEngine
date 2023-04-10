@@ -28,7 +28,7 @@ public class Camera : IDisposable {
   );
 
   public Matrix4x4 ProjectionMatrix => Matrix4x4.CreatePerspectiveFieldOfView(
-    MathHelper.DegreesToRadians(Zoom), window.Size.X / window.Size.Y, 0.1f, 100
+    MathHelper.DegreesToRadians(Zoom), window.Size.X / window.Size.Y, 0.1f, 100f
   );
 
   public Camera(IWindow window, IInputContext input) : 
@@ -107,11 +107,12 @@ public class Camera : IDisposable {
 
     // We don't want to be able to look behind us by going over our head or under our feet so make sure it stays within these bounds
     Pitch = Math.Clamp(Pitch, -89.0f, 89.0f);
-    var direction = new Vector3(
-      MathF.Cos(MathHelper.DegreesToRadians(Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Pitch)),
-      MathF.Sin(MathHelper.DegreesToRadians(Pitch)),
-      MathF.Sin(MathHelper.DegreesToRadians(Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Pitch))
-    );
+
+    var direction = Vector3.Zero;
+    direction.X = MathF.Cos(MathHelper.DegreesToRadians(Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Pitch));
+    direction.Y = MathF.Sin(MathHelper.DegreesToRadians(Pitch));
+    direction.Z = MathF.Sin(MathHelper.DegreesToRadians(Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Pitch));
+
     Front = Vector3.Normalize(direction);
   }
 

@@ -33,7 +33,7 @@ public class Program {
 
       glContext.Enable(GLEnum.DepthTest);
 
-      camera = new Camera(window, inputContext);
+      camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
       scene = new Scene(camera);
 
       var mesh = new CubeWithTextureData(glContext);
