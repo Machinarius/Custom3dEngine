@@ -36,7 +36,7 @@ public class Program {
       camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
       scene = new Scene(camera);
 
-      var mesh = new CubeWithTextureData(glContext);
+      var mesh = new Cube(glContext);
       var bufferedMesh = new BufferedMesh(glContext, mesh);
       bufferedMesh.ActivateVertexAttributes();
 
