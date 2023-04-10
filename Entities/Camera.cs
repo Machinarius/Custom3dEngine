@@ -50,9 +50,17 @@ public class Camera : IDisposable {
     primaryKeyboard = input.Keyboards[0];
     primaryMouse = input.Mice[0];
     if (primaryMouse != null) {
+      window.FocusChanged += OnWindowFocusChanged;
+
       primaryMouse.Cursor.CursorMode = CursorMode.Raw;
       primaryMouse.MouseMove += OnMouseMove;
       primaryMouse.Scroll += OnMouseScroll;
+    }
+  }
+
+  private void OnWindowFocusChanged(bool isFocused) {
+    if (!isFocused) {
+      lastMousePosition = default;
     }
   }
 
@@ -120,6 +128,7 @@ public class Camera : IDisposable {
     if (primaryMouse != null) {
       primaryMouse.MouseMove -= OnMouseMove;
       primaryMouse.Scroll -= OnMouseScroll;
+      window.FocusChanged -= OnWindowFocusChanged;
     }
   }
 }

@@ -40,14 +40,17 @@ public class Program {
       var bufferedMesh = new BufferedMesh(glContext, mesh);
       bufferedMesh.ActivateVertexAttributes();
 
-      var solidCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVP.vert", "Lighting.frag"), new ColorWithAmbientLightShaderArgs());
-      var lightCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVP.vert", "White.frag"));
+      var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
+      var lightingShaderArgsTransform = new ColorWithAmbientLightShaderArgs(lightPosition);
+
+      var solidCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "Lighting.frag"), lightingShaderArgsTransform);
+      var lightCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "White.frag"));
       scene.Add(solidCubeObject);
       scene.Add(lightCubeObject);
 
       solidCubeObject.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(25f));
       lightCubeObject.Scale = 0.2f;
-      lightCubeObject.Position = new Vector3(1.2f, 1.0f, 2.0f);
+      lightCubeObject.Position = lightPosition;
     };
 
     window.FramebufferResize += size => {
