@@ -1,5 +1,7 @@
 ﻿using Machinarius.Custom3dEngine.Entities;
+using Machinarius.Custom3dEngine.Entities.Behaviors;
 using Machinarius.Custom3dEngine.GLAbstractions;
+using Machinarius.Custom3dEngine.Helpers;
 using Machinarius.Custom3dEngine.Meshes;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
@@ -16,9 +18,8 @@ public class Program {
     var options = WindowOptions.Default;
     options.Title = "My 3d engine";
 
-    IMesh? meshData = null;
-    BufferedMesh? bufferedMesh = null;
     Camera? camera = null;
+    Scene? scene = null;
 
     using var window = Window.Create(options);
     window.Load += () => {
@@ -28,13 +29,20 @@ public class Program {
       glContext.Enable(GLEnum.DepthTest);
 
       camera = new Camera(window, inputContext);
-      meshData =  new CubeWithTextureData(glContext, camera);
-      bufferedMesh = new BufferedMesh(glContext, meshData);
+      scene = new Scene(camera);
+
+      var mesh = new CubeWithTextureData(glContext);
+      var bufferedMesh = new BufferedMesh(glContext, mesh);
       bufferedMesh.ActivateVertexAttributes();
-      
-      meshData.Transformation = new Transformation {
-        Rotation = Quaternion.CreateFromYawPitchRoll(2f, 1f, 3f)
-      };
+
+      var solidCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVP.vert", "Lighting.frag"), new ColorWithAmbientLightShaderArgs());
+      var lightCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVP.vert", "White.frag"));
+      scene.Add(solidCubeObject);
+      scene.Add(lightCubeObject);
+
+      solidCubeObject.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(25f));
+      lightCubeObject.Scale = 0.2f;
+      lightCubeObject.Position = new Vector3(1.2f, 1.0f, 2.0f);
     };
 
     window.FramebufferResize += size => {
@@ -46,11 +54,10 @@ public class Program {
     };
 
     window.Render += deltaTime => {
-      glContext?.ClearColor(System.Drawing.Color.Black);
+      glContext?.ClearColor(System.Drawing.Color.Wheat);
       glContext?.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-      bufferedMesh?.VertexArray.Bind();
-      bufferedMesh?.Draw(deltaTime, window.Time);
+      scene?.Draw(deltaTime, window.Time);
 
       if (!ShouldGameStillRun(inputContext)) {
         window.Close();
@@ -59,8 +66,7 @@ public class Program {
 
     window.Closing += () => {
       camera?.Dispose();
-      bufferedMesh?.Dispose();
-      meshData?.Dispose();
+      scene?.Dispose();
 
       glContext?.Dispose();
       inputContext?.Dispose();

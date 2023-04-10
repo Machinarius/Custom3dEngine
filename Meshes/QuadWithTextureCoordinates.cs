@@ -3,21 +3,17 @@ using Silk.NET.OpenGL;
 
 namespace Machinarius.Custom3dEngine.Meshes;
 
-public class QuadWithTextureCoordinates : BaseMesh {
+public class QuadWithTextureCoordinates : IMesh {
   private readonly Simple2DTexture texture;
 
-  private const string vertexShaderName = "TransformationWithUv.vert";
-
-  private const string fragmentShaderName = "BasicTextureWithAlphaDiscard.frag";
-
-  public override VertexAttributeDescriptor[] Attributes => new [] {
+  public VertexAttributeDescriptor[] Attributes => new [] {
     // 3 floats for XYZ coordinates every 5 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 5, 0),
     // 2 floats for UV coordinates every 5 elements, starting from the third element
     new VertexAttributeDescriptor(4, VertexAttribPointerType.Float, 5, 3),
   };
   
-  public override float[] Vertices => new[] {
+  public float[] Vertices => new[] {
     //X     Y      Z     U  V
       0.5f,  0.5f, 0.0f, 1, 0, 
       0.5f, -0.5f, 0.0f, 1, 1, 
@@ -25,31 +21,24 @@ public class QuadWithTextureCoordinates : BaseMesh {
      -0.5f,  0.5f, 0.5f, 0, 0
   };
 
-  public override uint[] Indices => new uint[] {
+  public uint[] Indices => new uint[] {
     0, 1, 3,
     1, 2, 3
   };
-  public override Transformation? Transformation { get; set; }
-  protected override ShaderProgram Shaders { get; }
 
   private readonly GL gl;
 
   public QuadWithTextureCoordinates(GL gl) {
     this.gl = gl;
-    Shaders = new ShaderProgram(gl, vertexShaderName, fragmentShaderName);
     texture = new Simple2DTexture(gl, Path.Combine(Directory.GetCurrentDirectory(), "Assets", "silk.png"));
   }
 
-  public unsafe override void Draw(double deltaTime, double absoluteTime) {
+  public unsafe void Draw() {
     texture.Bind(TextureUnit.Texture0);
-    Shaders.Use();
-    Shaders.SetUniform("uTexture", 0);
-    ApplyTransformationIfNeeded();
     gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 
-  public override void Dispose() {
-    Shaders.Dispose();
+  public void Dispose() {
     texture.Dispose();
   }
 }

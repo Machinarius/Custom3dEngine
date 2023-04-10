@@ -1,4 +1,3 @@
-using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -46,10 +45,10 @@ public class ShaderProgram : IDisposable {
 
   public unsafe void SetUniform(string name, Matrix4x4 value) {
     gl.UniformMatrix4(GetUniformLocation(name), 1, false, (float*) &value);
-    var error = gl.GetError();
-    if (error != GLEnum.NoError) {
-      throw new InvalidOperationException($"Could not set a M4x4 uniform value for name '{name}'\n{error}");
-    }
+  }
+
+  public void SetUniform(string name, Vector3 value) {
+    gl.Uniform3(GetUniformLocation(name), value);
   }
 
   public bool HasUniform(string name) {

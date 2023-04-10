@@ -16,7 +16,6 @@ public class Camera : IDisposable {
   private Vector2 lastMousePosition;
 
   public Vector3 Position { get; private set; }
-  public Vector3 Direction { get; private set; }
   public Vector3 Up { get; private set; }
   public Vector3 Front { get; private set; }
 
@@ -32,14 +31,17 @@ public class Camera : IDisposable {
     MathHelper.DegreesToRadians(Zoom), window.Size.X / window.Size.Y, 0.1f, 100
   );
 
-  public Camera(IWindow window, IInputContext input) {
+  public Camera(IWindow window, IInputContext input) : 
+    this(window, input, new Vector3(0, 0, 3), Vector3.UnitY, new Vector3(0, 0, -1)) {
+    // Start a few units away from the center of the scene so the contents can be seen
+  }
+
+  public Camera(IWindow window, IInputContext input, Vector3 position, Vector3 up, Vector3 front) {
     this.window = window ?? throw new ArgumentNullException(nameof(window));
 
-    // Start a few units away from the center of the scene so the contents can be seen
-    Position = new Vector3(0, 0, 3);
-    Direction = Vector3.Zero;
-    Up = Vector3.UnitY;
-    Front = new Vector3(0.0f, 0.0f, -1.0f);
+    Position = position;
+    Up = up;
+    Front = front;
 
     Yaw = -90f;
     Pitch = 0f;
@@ -103,13 +105,14 @@ public class Camera : IDisposable {
     Yaw += xOffset;
     Pitch -= yOffset;
 
+    // We don't want to be able to look behind us by going over our head or under our feet so make sure it stays within these bounds
     Pitch = Math.Clamp(Pitch, -89.0f, 89.0f);
-    Direction = new Vector3(
+    var direction = new Vector3(
       MathF.Cos(MathHelper.DegreesToRadians(Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Pitch)),
       MathF.Sin(MathHelper.DegreesToRadians(Pitch)),
       MathF.Sin(MathHelper.DegreesToRadians(Yaw)) * MathF.Cos(MathHelper.DegreesToRadians(Pitch))
     );
-    Front = Vector3.Normalize(Direction);
+    Front = Vector3.Normalize(direction);
   }
 
   public void Dispose() {

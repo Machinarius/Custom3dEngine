@@ -3,8 +3,6 @@ using Silk.NET.OpenGL;
 namespace Machinarius.Custom3dEngine.GLAbstractions;
 
 public class BufferedMesh : IDisposable {
-  private readonly GL gl;
-
   public BufferObject<uint> ElementBuffer { get; }
   public BufferObject<float> VertexBuffer { get; }
   public VertexArrayObject<float, uint> VertexArray { get; }
@@ -12,8 +10,6 @@ public class BufferedMesh : IDisposable {
   public IMesh SourceMesh { get; }
 
   public BufferedMesh(GL gl, IMesh sourceMesh) {
-    this.gl = gl;
-
     SourceMesh = sourceMesh;
 
     ElementBuffer = new BufferObject<uint>(gl, BufferTargetARB.ElementArrayBuffer, sourceMesh.Indices);
@@ -28,13 +24,15 @@ public class BufferedMesh : IDisposable {
     }
   }
 
-  public unsafe void Draw(double deltaTime, double absoluteTime) {
-    SourceMesh.Draw(deltaTime, absoluteTime);
+  public unsafe void Draw() {
+    VertexArray.Bind();
+    SourceMesh.Draw();
   }
 
   public void Dispose() {
     ElementBuffer.Dispose();
     VertexBuffer.Dispose();
     VertexArray.Dispose();
+    SourceMesh.Dispose();
   }
 }
