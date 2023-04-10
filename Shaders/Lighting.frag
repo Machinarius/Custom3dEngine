@@ -5,28 +5,37 @@ out vec4 gl_Color;
 in vec3 fNormal;
 in vec3 fPos;
 
-uniform vec3 objectColor;
-uniform vec3 lightColor;
-uniform vec3 lightPos;
+struct Material {
+  vec3 ambient;
+  vec3 diffuse;
+  vec3 specular;
+  float shininess;
+};
+
+struct LightSource {
+  vec3 position;
+  vec3 ambient;
+  vec3 diffuse;
+  vec3 specular;
+};
+
+uniform Material material;
+uniform LightSource light;
 uniform vec3 cameraPos;
 
 void main() {
-  float ambientStrength = 0.1;
-  vec3 ambient = ambientStrength * lightColor;
+  vec3 ambient = light.ambient * material.ambient;
 
   vec3 normal = normalize(fNormal);
-  vec3 lightDirection = normalize(lightPos - fPos);
+  vec3 lightDirection = normalize(light.position - fPos);
   float diffuseFactor = max(dot(normal, lightDirection), 0.0);
-  vec3 diffuse = diffuseFactor * lightColor;
+  vec3 diffuse = light.diffuse * (diffuseFactor * material.diffuse);
 
-  float specularStrength = 0.5;
   vec3 viewDirection = normalize(cameraPos - fPos);
   vec3 reflectDirection = reflect(-lightDirection, normal);
-  float specularFactor = pow(max(dot(viewDirection, reflectDirection), 0.0), 32);
-  vec3 specular = specularStrength * specularFactor * lightColor;
+  float specularFactor = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess);
+  vec3 specular = light.specular * (specularFactor * material.specular);
 
-  // The resulting colour should be the amount of ambient colour + the amount of additional colour provided by the diffuse of the lamp
-  vec3 result = (ambient + diffuse + specular) * objectColor;
-
+  vec3 result = ambient + diffuse + specular;
   gl_Color = vec4(result, 1.0);
 }

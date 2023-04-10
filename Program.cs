@@ -1,5 +1,6 @@
 ﻿using Machinarius.Custom3dEngine.DebugUtils;
 using Machinarius.Custom3dEngine.Entities;
+using Machinarius.Custom3dEngine.Entities.Attributes;
 using Machinarius.Custom3dEngine.Entities.Behaviors;
 using Machinarius.Custom3dEngine.GLAbstractions;
 using Machinarius.Custom3dEngine.Helpers;
@@ -40,17 +41,18 @@ public class Program {
       var bufferedMesh = new BufferedMesh(glContext, mesh);
       bufferedMesh.ActivateVertexAttributes();
 
-      var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
-      var lightingShaderArgsTransform = new ColorWithAmbientLightShaderArgs(lightPosition, camera);
-
-      var solidCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "Lighting.frag"), lightingShaderArgsTransform);
+      var solidCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "Lighting.frag"));
       var lightCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "White.frag"));
       scene.Add(solidCubeObject);
       scene.Add(lightCubeObject);
 
-      solidCubeObject.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(25f));
+      var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
       lightCubeObject.Scale = 0.2f;
       lightCubeObject.Position = lightPosition;
+
+      solidCubeObject.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(25f));
+      solidCubeObject.AttachAttribute(new LitByEmmisive(lightPosition, camera));
+      solidCubeObject.AttachAttribute(new Material());
     };
 
     window.FramebufferResize += size => {

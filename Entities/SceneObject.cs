@@ -1,4 +1,4 @@
-using Machinarius.Custom3dEngine.DebugUtils;
+using Machinarius.Custom3dEngine.Entities.Attributes;
 using Machinarius.Custom3dEngine.GLAbstractions;
 using System.Numerics;
 
@@ -18,10 +18,12 @@ public class SceneObject {
     "uProjection"
   };
 
-  private readonly ITransformationBehavior? transformationBehavior;
+  public ITransformationBehavior? TransformationBehavior { get; set; }
 
-  public SceneObject(BufferedMesh mesh, ShaderProgram shaders, ITransformationBehavior? transformationBehavior = null) {
-    this.transformationBehavior = transformationBehavior;
+  private readonly List<IObjectAttribute> attributes;
+
+  public SceneObject(BufferedMesh mesh, ShaderProgram shaders) {
+    attributes = new List<IObjectAttribute>();
 
     Mesh = mesh ?? throw new ArgumentNullException(nameof(mesh));
     Shaders = shaders ?? throw new ArgumentNullException(nameof(shaders));
@@ -33,12 +35,20 @@ public class SceneObject {
     }
   }
 
+  public void AttachAttribute(IObjectAttribute attribute) {
+    attributes.Add(attribute);
+  }
+
   public void Draw(double deltaTime, double absoluteTime, Camera viewSource) {
     Shaders.Use();
+
+    foreach (var attr in attributes) {
+      attr.WriteToShader(Shaders, deltaTime, absoluteTime);
+    }
     
     Matrix4x4 modelMatrix;
-    if (transformationBehavior != null) {
-      var result = transformationBehavior.Run(deltaTime, absoluteTime, this);
+    if (TransformationBehavior != null) {
+      var result = TransformationBehavior.Run(deltaTime, absoluteTime, this);
       modelMatrix = BuildModelMatrix(result.Position, result.Scale, result.Rotation);
     } else {
       modelMatrix = BuildModelMatrix(Position, Scale, Rotation);
