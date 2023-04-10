@@ -7,11 +7,17 @@ public class ShaderProgram : IDisposable {
   private readonly uint handle;
   private readonly GL gl;
 
+  public string VertexFilename { get; }
+  public string FragmentFilename { get; }
+
   public ShaderProgram(GL gl, string vertexFilename, string fragmentFilename) {
     this.gl = gl;
 
     var vertexId = LoadShader(ShaderType.VertexShader, vertexFilename);
     var fragmentId = LoadShader(ShaderType.FragmentShader, fragmentFilename);
+
+    VertexFilename = vertexFilename;
+    FragmentFilename = fragmentFilename;
 
     handle = gl.CreateProgram();
     gl.AttachShader(handle, vertexId);
@@ -48,7 +54,7 @@ public class ShaderProgram : IDisposable {
   }
 
   public void SetUniform(string name, Vector3 value) {
-    gl.Uniform3(GetUniformLocation(name), value);
+    gl.Uniform3(GetUniformLocation(name), value.X, value.Y, value.Z);
   }
 
   public bool HasUniform(string name) {
@@ -57,7 +63,7 @@ public class ShaderProgram : IDisposable {
   }
 
   public void Dispose() {
-    gl.DeleteProgram(handle); 
+    gl.DeleteProgram(handle);
   }
 
   private int GetUniformLocation(string name) {

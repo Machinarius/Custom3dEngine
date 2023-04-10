@@ -1,3 +1,4 @@
+using Machinarius.Custom3dEngine.DebugUtils;
 using Machinarius.Custom3dEngine.GLAbstractions;
 using System.Numerics;
 
@@ -33,6 +34,8 @@ public class SceneObject {
   }
 
   public void Draw(double deltaTime, double absoluteTime, Camera viewSource) {
+    Shaders.Use();
+    
     Matrix4x4 modelMatrix;
     if (transformationBehavior != null) {
       var result = transformationBehavior.Run(deltaTime, absoluteTime, this);
@@ -44,7 +47,6 @@ public class SceneObject {
     Shaders.SetUniform("uModel", modelMatrix);
     Shaders.SetUniform("uView", viewSource.ViewMatrix);
     Shaders.SetUniform("uProjection", viewSource.ProjectionMatrix);
-    Shaders.Use();
 
     Mesh.Draw();
   }

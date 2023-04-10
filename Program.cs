@@ -1,4 +1,5 @@
-﻿using Machinarius.Custom3dEngine.Entities;
+﻿using Machinarius.Custom3dEngine.DebugUtils;
+using Machinarius.Custom3dEngine.Entities;
 using Machinarius.Custom3dEngine.Entities.Behaviors;
 using Machinarius.Custom3dEngine.GLAbstractions;
 using Machinarius.Custom3dEngine.Helpers;
@@ -25,6 +26,10 @@ public class Program {
     window.Load += () => {
       glContext = window.CreateOpenGL();
       inputContext = window.CreateInput();
+
+#if DEBUG
+      glContext.EnableDebugOutput();
+#endif
 
       glContext.Enable(GLEnum.DepthTest);
 
@@ -54,7 +59,7 @@ public class Program {
     };
 
     window.Render += deltaTime => {
-      glContext?.ClearColor(System.Drawing.Color.Wheat);
+      glContext?.ClearColor(System.Drawing.Color.Black);
       glContext?.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
       scene?.Draw(deltaTime, window.Time);
