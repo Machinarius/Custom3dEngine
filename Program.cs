@@ -41,7 +41,7 @@ public class Program {
       bufferedMesh.ActivateVertexAttributes();
 
       var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
-      var lightingShaderArgsTransform = new ColorWithAmbientLightShaderArgs(lightPosition);
+      var lightingShaderArgsTransform = new ColorWithAmbientLightShaderArgs(lightPosition, camera);
 
       var solidCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "Lighting.frag"), lightingShaderArgsTransform);
       var lightCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "White.frag"));
