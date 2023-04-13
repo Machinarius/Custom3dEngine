@@ -37,12 +37,12 @@ public class Program {
       camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
       scene = new Scene(camera);
 
-      var mesh = new Cube(glContext);
+      var mesh = new CubeWithNormalsAndUV(glContext);
       var bufferedMesh = new BufferedMesh(glContext, mesh);
       bufferedMesh.ActivateVertexAttributes();
 
-      var solidCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "Lighting.frag"));
-      var lightCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndNormals.vert", "White.frag"));
+      var solidCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndUvAndNormals.vert", "Lighting.frag"));
+      var lightCubeObject = new SceneObject(bufferedMesh, new ShaderProgram(glContext, "IdentityWithMVPAndUvAndNormals.vert", "White.frag"));
       scene.Add(solidCubeObject);
       scene.Add(lightCubeObject);
 
@@ -52,7 +52,7 @@ public class Program {
 
       solidCubeObject.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians(25f));
       solidCubeObject.AttachAttribute(new LitByEmmisive(lightPosition, camera));
-      solidCubeObject.AttachAttribute(new Material());
+      solidCubeObject.AttachAttribute(new SpecularWithTextureMaterial());
     };
 
     window.FramebufferResize += size => {

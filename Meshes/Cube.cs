@@ -5,7 +5,7 @@ namespace Machinarius.Custom3dEngine.Meshes;
 
 public class Cube : IMesh {
   public VertexAttributeDescriptor[] Attributes => new [] {
-    // 3 floats for XYZ coordinates every 3 elements, starting from 0
+    // 3 floats for XYZ coordinates every 6 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 6, 0),
     // 3 floats for XYZ of the normal every 6 elements, starting from 3
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 6, 3),
