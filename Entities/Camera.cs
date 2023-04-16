@@ -59,8 +59,14 @@ public class Camera : IDisposable {
   }
 
   private void OnWindowFocusChanged(bool isFocused) {
+    var cursorMode = CursorMode.Raw;
     if (!isFocused) {
+      cursorMode = CursorMode.Normal;
       lastMousePosition = default;
+    }
+
+    if (primaryMouse != null) {
+      primaryMouse.Cursor.CursorMode = cursorMode;
     }
   }
 

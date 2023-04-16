@@ -6,8 +6,11 @@ public class Simple2DTexture : IDisposable {
   private readonly uint handle;
   private readonly GL gl;
 
+  public string? FilePath;
+
   public Simple2DTexture(GL gl, string filePath) {
     this.gl = gl;
+    FilePath = filePath;
 
     handle = gl.GenTexture();
     Bind();
