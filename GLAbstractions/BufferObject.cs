@@ -1,3 +1,4 @@
+using Machinarius.Custom3dEngine.DebugUtils;
 using Silk.NET.OpenGL;
 
 namespace Machinarius.Custom3dEngine.GLAbstractions;
@@ -17,8 +18,11 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
   }
 
   private unsafe void UploadDataToBuffer(ReadOnlySpan<TDataType> data) {
+    var bufferSize = data.Length * sizeof(TDataType);
+    Console.WriteLine($"Uploading {bufferSize} bytes to buffer {handle} of type {bufferType}.");
     fixed (void* rawData = data) {
-      gl.BufferData(bufferType, (nuint) (data.Length * sizeof(TDataType)), rawData, BufferUsageARB.StaticDraw);
+      gl.BufferData(bufferType, (nuint) bufferSize, rawData, BufferUsageARB.StaticDraw);
+      gl.EnsureCallSucceeded();
     }
   }
 

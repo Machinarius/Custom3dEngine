@@ -6,7 +6,7 @@ namespace Machinarius.Custom3dEngine.Meshes;
 public class Quad : IMesh {
   public VertexAttributeDescriptor[] Attributes => new [] {
     // 3 floats for XYZ coordinates every 3 elements, starting from 0
-    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 3, 0),
+    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 3, 0, VertexAttributePayloadType.Position),
   };
 
   // Without any projection or model transformations these are effectively clip-space
@@ -23,6 +23,8 @@ public class Quad : IMesh {
     0, 1, 3,
     1, 2, 3
   };
+
+  public Simple2DTexture? Texture => throw new NotImplementedException();
 
   private readonly GL gl;
 

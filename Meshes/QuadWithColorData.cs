@@ -6,9 +6,9 @@ namespace Machinarius.Custom3dEngine.Meshes;
 public class QuadWithColorData : IMesh {
   public VertexAttributeDescriptor[] Attributes => new [] {
     // 3 floats for XYZ coordinates every 7 elements, starting from 0
-    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 7, 0),
+    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 7, 0, VertexAttributePayloadType.Position),
     // 4 floats for RGBA color every 7 elements, starting from the third element
-    new VertexAttributeDescriptor(4, VertexAttribPointerType.Float, 7, 3),
+    new VertexAttributeDescriptor(4, VertexAttribPointerType.Float, 7, 3, VertexAttributePayloadType.RgbaColor),
   };
   
   public float[] Vertices => new[] {
@@ -23,6 +23,8 @@ public class QuadWithColorData : IMesh {
     0, 1, 3,
     1, 2, 3
   };
+
+  public Simple2DTexture? Texture => throw new NotImplementedException();
 
   private readonly GL gl;
 

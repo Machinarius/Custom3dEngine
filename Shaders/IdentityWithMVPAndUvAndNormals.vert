@@ -8,6 +8,7 @@ uniform mat4 uModel;
 uniform mat4 uView;
 uniform mat4 uProjection;
 
+out vec3 fSourcePos;
 out vec3 fNormal;
 out vec3 fPos;
 out vec2 fUv;
@@ -21,4 +22,5 @@ void main() {
   fNormal = mat3(transpose(inverse(uModel))) * vNormal;
   //Pass the texture coordinates straight through to the fragment shader
   fUv = vUv;  
+  fSourcePos = vPos;
 }

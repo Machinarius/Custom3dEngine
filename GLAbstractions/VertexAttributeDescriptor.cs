@@ -7,11 +7,23 @@ public class VertexAttributeDescriptor {
   public VertexAttribPointerType Type { get; }
   public uint Stride { get; }
   public int Offset { get; }
+  public VertexAttributePayloadType PayloadType { get; }
 
-  public VertexAttributeDescriptor(int elementCount, VertexAttribPointerType type, uint stride, int offset) {
+  public VertexAttributeDescriptor(
+    int elementCount, VertexAttribPointerType type, uint stride, int offset,
+    VertexAttributePayloadType payloadType
+  ) {
     ElementCount = elementCount;
     Type = type;
     Stride = stride;
     Offset = offset;
+    PayloadType = payloadType;
   }
+}
+
+public enum VertexAttributePayloadType {
+  Position,
+  Normal,
+  TextureCoordinates,
+  RgbaColor,
 }

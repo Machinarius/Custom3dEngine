@@ -7,7 +7,7 @@ namespace Machinarius.Custom3dEngine.Entities;
 
 public class Camera : IDisposable {
   private const float LookSensitivity = 0.1f;
-  private const float MoveSpeed = 2.5f;
+  private const float MoveSpeed = 0.75f;
 
   private readonly IWindow window;
   private readonly IMouse? primaryMouse;
@@ -27,8 +27,10 @@ public class Camera : IDisposable {
     Position, Position + Front, Up
   );
 
+  private float ViewportAspectRatio => window.Size.X / (float) window.Size.Y;
+
   public Matrix4x4 ProjectionMatrix => Matrix4x4.CreatePerspectiveFieldOfView(
-    MathHelper.DegreesToRadians(Zoom), window.Size.X / window.Size.Y, 0.1f, 100f
+    MathHelper.DegreesToRadians(Zoom), ViewportAspectRatio, 0.1f, 100f
   );
 
   public Camera(IWindow window, IInputContext input) : 
@@ -52,13 +54,13 @@ public class Camera : IDisposable {
     if (primaryMouse != null) {
       window.FocusChanged += OnWindowFocusChanged;
 
-      primaryMouse.Cursor.CursorMode = CursorMode.Raw;
       primaryMouse.MouseMove += OnMouseMove;
       primaryMouse.Scroll += OnMouseScroll;
     }
   }
 
   private void OnWindowFocusChanged(bool isFocused) {
+#if !DEBUG
     var cursorMode = CursorMode.Raw;
     if (!isFocused) {
       cursorMode = CursorMode.Normal;
@@ -68,6 +70,7 @@ public class Camera : IDisposable {
     if (primaryMouse != null) {
       primaryMouse.Cursor.CursorMode = cursorMode;
     }
+#endif
   }
 
   public void Update(double deltaTime) {

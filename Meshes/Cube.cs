@@ -6,9 +6,9 @@ namespace Machinarius.Custom3dEngine.Meshes;
 public class Cube : IMesh {
   public VertexAttributeDescriptor[] Attributes => new [] {
     // 3 floats for XYZ coordinates every 6 elements, starting from 0
-    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 6, 0),
+    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 6, 0, VertexAttributePayloadType.Position),
     // 3 floats for XYZ of the normal every 6 elements, starting from 3
-    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 6, 3),
+    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 6, 3, VertexAttributePayloadType.Normal),
   };
 
   public float[] Vertices => new [] {
@@ -57,6 +57,8 @@ public class Cube : IMesh {
   };
 
   public uint[] Indices => Array.Empty<uint>();
+
+  public Simple2DTexture? Texture => throw new NotImplementedException();
 
   private readonly GL gl;
 

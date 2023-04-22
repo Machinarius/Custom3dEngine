@@ -31,10 +31,19 @@ public class ShaderProgram : IDisposable {
     }
 
     // These are no longer valuable by themselves
-    gl.DetachShader(handle, vertexId);
-    gl.DetachShader(handle, fragmentId);
+    //gl.DetachShader(handle, vertexId);
+    //gl.DetachShader(handle, fragmentId);
     gl.DeleteShader(vertexId);
     gl.DeleteShader(fragmentId);
+  }
+
+  public void Validate() {
+    gl.ValidateProgram(handle);
+    gl.GetProgram(handle, GLEnum.ValidateStatus, out var validationSuccessful);
+    if (validationSuccessful != (uint)GLEnum.True) {
+      var errorLog = gl.GetProgramInfoLog(handle);
+      throw new InvalidOperationException($"Could not validate the Program for Vertex shader '{VertexFilename}' and Fragment shader {FragmentFilename}\n{errorLog}");
+    }
   }
 
   public void Use() {

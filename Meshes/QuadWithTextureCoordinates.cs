@@ -8,9 +8,9 @@ public class QuadWithTextureCoordinates : IMesh {
 
   public VertexAttributeDescriptor[] Attributes => new [] {
     // 3 floats for XYZ coordinates every 5 elements, starting from 0
-    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 5, 0),
+    new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 5, 0, VertexAttributePayloadType.Position),
     // 2 floats for UV coordinates every 5 elements, starting from the third element
-    new VertexAttributeDescriptor(4, VertexAttribPointerType.Float, 5, 3),
+    new VertexAttributeDescriptor(4, VertexAttribPointerType.Float, 5, 3, VertexAttributePayloadType.TextureCoordinates),
   };
   
   public float[] Vertices => new[] {
@@ -25,6 +25,8 @@ public class QuadWithTextureCoordinates : IMesh {
     0, 1, 3,
     1, 2, 3
   };
+
+  public Simple2DTexture? Texture => throw new NotImplementedException();
 
   private readonly GL gl;
 

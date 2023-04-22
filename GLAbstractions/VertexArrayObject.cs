@@ -44,8 +44,11 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
     uint stride, 
     int offset
   ) {
-    gl.VertexAttribPointer(index, size, type, false, stride * (uint)sizeof(TVertexType), (void*)(offset * sizeof(TVertexType)));
+    var elementSize = (uint)sizeof(TVertexType);
+    Console.WriteLine($"Activating vertex attribute at location {index}, with {size} elements, every {stride} elements, starting from {offset}, with element size of {elementSize} bytes.");
+
     gl.EnableVertexAttribArray(index);
+    gl.VertexAttribPointer(index, size, type, false, stride * elementSize, (void*)(offset * elementSize));
   }
   
   public void Dispose() {

@@ -20,12 +20,16 @@ public class BufferedMesh : IDisposable {
   public void ActivateVertexAttributes() {
     for (uint i = 0; i < SourceMesh.Attributes.Length; i++) {
       var descriptor = SourceMesh.Attributes[i];
-      VertexArray.VertexAttribPointer(i, descriptor.ElementCount, descriptor.Type, descriptor.Stride, descriptor.Offset);
+      var pointer = ShaderConstants.GetStandardAttributeLocation(descriptor.PayloadType);
+      VertexArray.VertexAttribPointer(pointer, descriptor.ElementCount, descriptor.Type, descriptor.Stride, descriptor.Offset);
     }
   }
 
-  public unsafe void Draw() {
+  public void Bind() {
     VertexArray.Bind();
+  }
+
+  public void Draw() { 
     SourceMesh.Draw();
   }
 
