@@ -22,11 +22,12 @@ public class DataMesh : IMesh {
     Texture = texture;
     Attributes = attributes;
     Vertices = vertices;
-    Indices = Array.Empty<uint>();
+    Indices = indices;
   }
 
-  public void Draw() {
-    gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
+  public unsafe void Draw() {
+    //gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
+    gl.DrawElements(PrimitiveType.Triangles, (uint)Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 
   public void Dispose() {

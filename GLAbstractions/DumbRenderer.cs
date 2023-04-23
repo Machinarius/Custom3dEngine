@@ -48,7 +48,7 @@ public class DumbRenderer {
     camera = new Entities.Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
     model = new Model(gl, Path.Combine("Assets", "textured_cube.obj"));
     shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "BasicTextureWithAlphaDiscard.frag");
-    meshes = new IMesh[] { new CubeWithNormalsAndUV(gl) }.Select(mesh => new BufferedMesh(gl, mesh)).ToArray();
+    meshes = model.Meshes.Select(mesh => new BufferedMesh(gl, mesh)).ToArray();
     foreach (var mesh in meshes) {
       mesh.ActivateVertexAttributes();
     }
