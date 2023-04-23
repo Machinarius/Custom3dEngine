@@ -43,6 +43,11 @@ public class DumbRenderer {
 #endif
 
     gl?.Enable(GLEnum.DepthTest);
+    gl?.DepthFunc(GLEnum.Greater);
+    
+    // Apparently required on AMD OpenGL implementation
+    gl?.Enable(GLEnum.CullFace);
+    gl?.FrontFace(GLEnum.Ccw);
     //gl?.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
 
     camera = new Entities.Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
@@ -78,8 +83,6 @@ public class DumbRenderer {
     foreach(var mesh in meshes ?? Array.Empty<BufferedMesh>()) {
       mesh.Draw();
     }
-
-    window?.SwapBuffers();
   }
 
   private void OnFramebufferResize(Vector2D<int> size) {
