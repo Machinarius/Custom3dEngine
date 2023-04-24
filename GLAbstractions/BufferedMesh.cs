@@ -3,7 +3,7 @@ using Silk.NET.OpenGL;
 namespace Machinarius.Custom3dEngine.GLAbstractions;
 
 public class BufferedMesh : IDisposable {
-  public BufferObject<uint> ElementBuffer { get; }
+  public BufferObject<uint>? ElementBuffer { get; }
   public BufferObject<float> VertexBuffer { get; }
   public VertexArrayObject<float, uint> VertexArray { get; }
 
