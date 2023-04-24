@@ -40,6 +40,7 @@ public class SceneObject {
   }
 
   public void Draw(double deltaTime, double absoluteTime, Camera viewSource) {
+    Mesh.Bind();
     Shaders.Use();
     
     foreach (var attr in attributes) {
@@ -59,7 +60,6 @@ public class SceneObject {
     Shaders.SetUniform("uProjection", viewSource.ProjectionMatrix);
 
     Shaders.Validate();
-    Mesh.Bind();
     Mesh.Draw();
   }
 

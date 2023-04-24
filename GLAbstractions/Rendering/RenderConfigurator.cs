@@ -34,7 +34,7 @@ public class RenderConfigurator {
     gl.Enable(GLEnum.CullFace);
     gl.FrontFace(GLEnum.Ccw);
     //gl.PolygonMode(GLEnum.FrontAndBack, GLEnum.Fill);
-    gl.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
+    // gl.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
 
     renderOrchestrator = new RenderOrchestrator(gl, window);
     renderOrchestrator.BeginRendering();

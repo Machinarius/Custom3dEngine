@@ -13,6 +13,7 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
     this.bufferType = bufferType;
 
     handle = gl.GenBuffer();
+    Console.WriteLine($"Created {bufferType} buffer object with index " + handle);
     Bind();
     UploadDataToBuffer(data);
   }

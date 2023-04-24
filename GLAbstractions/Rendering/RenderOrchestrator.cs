@@ -21,7 +21,7 @@ public class RenderOrchestrator {
     this.window = window ?? throw new ArgumentNullException(nameof(window));
 
     inputContext = window.CreateInput();
-    camera = new Entities.Camera(window, inputContext);
+    camera = new Camera(window, inputContext);
     scene = new Scene(camera);
   }
 
@@ -40,21 +40,24 @@ public class RenderOrchestrator {
   private void LoadScene() {
     var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
     var model = new Model(gl, Path.Combine("Assets", "textured_cube.obj"));
-    var shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "DebugPositionToColor.frag");
+    var shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "Lighting.frag");
     foreach (var mesh in model.Meshes) {
       var bufferedObject = new BufferedMesh(gl, mesh);
       bufferedObject.ActivateVertexAttributes();
 
-      var sceneObject = new SceneObject(bufferedObject, shader);
-      //sceneObject.AttachAttribute(new LitByEmmisive(lightPosition, camera));
+      var sceneObject = new SceneObject(bufferedObject, shader) {
+        Scale = 0.5f
+      };
+      sceneObject.AttachAttribute(new LitByEmmisive(lightPosition, camera));
       scene.Add(sceneObject);
     }
 
+    Console.WriteLine("Creating lamp mesh");
     var lampMesh = new Cube(gl);
     var lampBufferedMesh = new BufferedMesh(gl, lampMesh);
     lampBufferedMesh.ActivateVertexAttributes();
 
-    var lightCubeObject = new SceneObject(lampBufferedMesh, new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "White.frag")) {
+    var lightCubeObject = new SceneObject(lampBufferedMesh, new ShaderProgram(gl, "IdentityWithMVPAndNormals.vert", "White.frag")) {
       Scale = 0.1f,
       Position = lightPosition
     };

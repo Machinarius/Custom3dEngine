@@ -8,18 +8,20 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
   private readonly uint handle;
   private readonly GL gl;
 
-  public VertexArrayObject(GL gl, BufferObject<TVertexType> vertexBuffer, BufferObject<TIndexType> elementBuffer) {
+  public VertexArrayObject(GL gl, BufferObject<TVertexType> vertexBuffer, BufferObject<TIndexType>? elementBuffer) {
     this.gl = gl;
 
     handle = gl.GenVertexArray();
+    Console.WriteLine($"Created VAO {handle}");
 
     // Bind these buffers to this VAO
     Bind();
     vertexBuffer.Bind();
-    elementBuffer.Bind();
+    elementBuffer?.Bind();
   }
 
   public void Bind() {
+    Console.WriteLine($"Binding VAO {handle}");
     gl.BindVertexArray(handle);
   }
 

@@ -12,7 +12,9 @@ public class BufferedMesh : IDisposable {
   public BufferedMesh(GL gl, IMesh sourceMesh) {
     SourceMesh = sourceMesh;
 
-    ElementBuffer = new BufferObject<uint>(gl, BufferTargetARB.ElementArrayBuffer, sourceMesh.Indices);
+    if (sourceMesh.Indices != null && sourceMesh.Indices.Length > 0) {
+      ElementBuffer = new BufferObject<uint>(gl, BufferTargetARB.ElementArrayBuffer, sourceMesh.Indices);
+    }
     VertexBuffer = new BufferObject<float>(gl, BufferTargetARB.ArrayBuffer, sourceMesh.Vertices);
     VertexArray = new VertexArrayObject<float, uint>(gl, VertexBuffer, ElementBuffer);
   }
@@ -34,7 +36,7 @@ public class BufferedMesh : IDisposable {
   }
 
   public void Dispose() {
-    ElementBuffer.Dispose();
+    ElementBuffer?.Dispose();
     VertexBuffer.Dispose();
     VertexArray.Dispose();
     SourceMesh.Dispose();
