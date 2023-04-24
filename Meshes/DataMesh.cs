@@ -26,7 +26,6 @@ public class DataMesh : IMesh {
   }
 
   public unsafe void Draw() {
-    //gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
     gl.DrawElements(PrimitiveType.Triangles, (uint)Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 

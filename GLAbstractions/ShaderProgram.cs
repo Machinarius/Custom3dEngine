@@ -30,9 +30,9 @@ public class ShaderProgram : IDisposable {
       throw new InvalidOperationException($"Could not create a Program for Vertex shader '{vertexFilename}' and Fragment shader {fragmentFilename}\n{errorLog}");
     }
 
-    // These are no longer valuable by themselves
-    //gl.DetachShader(handle, vertexId);
-    //gl.DetachShader(handle, fragmentId);
+    // We delete the intermediate shaders, but don't detach
+    // them so the shader source code can still be retrieved.
+    // This is useful for OpenGL debugging tools
     gl.DeleteShader(vertexId);
     gl.DeleteShader(fragmentId);
   }

@@ -41,7 +41,6 @@ public class SceneObject {
 
   public void Draw(double deltaTime, double absoluteTime, Camera viewSource) {
     Shaders.Use();
-    Mesh.ActivateVertexAttributes();
     
     foreach (var attr in attributes) {
       attr.WriteToShader(Shaders, deltaTime, absoluteTime);
@@ -59,12 +58,14 @@ public class SceneObject {
     Shaders.SetUniform("uView", viewSource.ViewMatrix);
     Shaders.SetUniform("uProjection", viewSource.ProjectionMatrix);
 
+    Shaders.Validate();
+    Mesh.Bind();
     Mesh.Draw();
   }
 
   public void Dispose() {
-    Shaders?.Dispose();
-    Mesh?.Dispose();
+    Shaders.Dispose();
+    Mesh.Dispose();
   }
 
   static private Matrix4x4 BuildModelMatrix(Vector3 position, float scale, Quaternion rotation) {
