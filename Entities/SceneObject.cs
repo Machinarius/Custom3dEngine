@@ -1,5 +1,6 @@
 using Machinarius.Custom3dEngine.Entities.Attributes;
 using Machinarius.Custom3dEngine.GLAbstractions;
+using Silk.NET.Assimp;
 using System.Numerics;
 
 namespace Machinarius.Custom3dEngine.Entities;
@@ -40,6 +41,9 @@ public class SceneObject {
   }
 
   public void Draw(double deltaTime, double absoluteTime, Camera viewSource) {
+    Mesh.SourceMesh.DiffuseTexture?.Bind(Silk.NET.OpenGL.TextureUnit.Texture0);
+    Mesh.SourceMesh.SpecularTexture?.Bind(Silk.NET.OpenGL.TextureUnit.Texture1);
+
     Shaders.Use();
     Mesh.Bind();
     

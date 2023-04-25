@@ -63,7 +63,8 @@ public class CubeWithTextureData : IMesh {
     1, 2, 3,
   };
 
-  public Simple2DTexture? Texture => throw new NotImplementedException();
+  public Simple2DTexture? DiffuseTexture => null;
+  public Simple2DTexture? SpecularTexture => null;
 
   private readonly GL gl;
 

@@ -98,18 +98,15 @@ public class Model {
 
     var material = scene->MMaterials[mesh->MMaterialIndex];
     var diffuseTextures = LoadMaterialTextures(material, TextureType.Diffuse);
-    // var specularTextures = LoadMaterialTextures(material, TextureType.Specular);
+    var specularTextures = LoadMaterialTextures(material, TextureType.Specular);
     // var normalTextures = LoadMaterialTextures(material, TextureType.Normals);
     // var heightTextures = LoadMaterialTextures(material, TextureType.Height);
 
-    // // I still need to figure out what to do with the textures.
-    // var textures = (new Simple2DTexture[][] { diffuseTextures, specularTextures, normalTextures, heightTextures })
-    //   .Where(t => t != null && t.Length > 0)
-    //   .SelectMany(t => t)
-    //   .ToArray();
+    var diffuse = diffuseTextures?.FirstOrDefault();
+    var specular = specularTextures?.FirstOrDefault();
     
     var meshData = BuildMeshData(vertices);
-    var result = new DataMesh(gl, meshData.Attributes, meshData.Vertices, indices.ToArray(), diffuseTextures.Length > 0 ? diffuseTextures[0] : null);
+    var result = new DataMesh(gl, meshData.Attributes, meshData.Vertices, indices.ToArray(), diffuse, specular);
     meshes.Add(result);
   }
 

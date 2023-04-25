@@ -58,7 +58,8 @@ public class Cube : IMesh {
 
   public uint[] Indices => Array.Empty<uint>();
 
-  public Simple2DTexture? Texture => throw new NotImplementedException();
+  public Simple2DTexture? DiffuseTexture => null;
+  public Simple2DTexture? SpecularTexture => null;
 
   private readonly GL gl;
 

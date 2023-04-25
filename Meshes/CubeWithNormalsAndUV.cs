@@ -57,7 +57,8 @@ public class CubeWithNormalsAndUV : IMesh {
     20,22,23  // -Z Face, +X Triangle, v6, v0, v7
   };
 
-  public Simple2DTexture? Texture => texture;
+  public Simple2DTexture? DiffuseTexture => texture;
+  public Simple2DTexture? SpecularTexture => null;
 
   private readonly GL gl;
   private readonly Simple2DTexture texture;
