@@ -1,6 +1,5 @@
 using Machinarius.Custom3dEngine.GLAbstractions;
 using Silk.NET.OpenGL;
-using System.Text.Json;
 
 namespace Machinarius.Custom3dEngine.Meshes;
 
@@ -22,11 +21,11 @@ public class DataMesh : IMesh {
     Texture = texture;
     Attributes = attributes;
     Vertices = vertices;
-    Indices = Array.Empty<uint>();
+    Indices = indices;
   }
 
-  public void Draw() {
-    gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
+  public unsafe void Draw() {
+    gl.DrawElements(PrimitiveType.Triangles, (uint)Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 
   public void Dispose() {

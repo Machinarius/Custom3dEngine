@@ -7,7 +7,7 @@ namespace Machinarius.Custom3dEngine.Entities;
 
 public class Camera : IDisposable {
   private const float LookSensitivity = 0.1f;
-  private const float MoveSpeed = 0.75f;
+  private const float MoveSpeed = 1.5f;
 
   private readonly IWindow window;
   private readonly IMouse? primaryMouse;

@@ -34,6 +34,9 @@ public class DumbRenderer {
   private ShaderProgram? shader = null;
   private BufferedMesh[]? meshes = null;
 
+  private ShaderProgram lampShader = null;
+  private BufferedMesh? lampBufferedMesh = null;
+
   private void OnLoad() {
     gl = GL.GetApi(window);
     inputContext = window.CreateInput();
@@ -45,10 +48,15 @@ public class DumbRenderer {
     gl?.Enable(GLEnum.DepthTest);
     //gl?.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
 
+    var lampMesh = new Cube(gl);
+    lampBufferedMesh = new BufferedMesh(gl, lampMesh);
+    lampBufferedMesh.ActivateVertexAttributes();
+    lampShader = new ShaderProgram(gl, "IdentityWithMVPAndNormals.vert", "White.frag");
+
     camera = new Entities.Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
     model = new Model(gl, Path.Combine("Assets", "textured_cube.obj"));
     shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "BasicTextureWithAlphaDiscard.frag");
-    meshes = new IMesh[] { new CubeWithNormalsAndUV(gl) }.Select(mesh => new BufferedMesh(gl, mesh)).ToArray();
+    meshes = model.Meshes.Select(mesh => new BufferedMesh(gl, mesh)).ToArray();
     foreach (var mesh in meshes) {
       mesh.ActivateVertexAttributes();
     }
@@ -76,8 +84,16 @@ public class DumbRenderer {
     shader?.SetUniform("uView", camera.ViewMatrix);
     shader?.SetUniform("uProjection", camera.ProjectionMatrix);
     foreach(var mesh in meshes ?? Array.Empty<BufferedMesh>()) {
+      mesh.Bind();
       mesh.Draw();
     }
+
+    lampShader?.Use();
+    lampShader?.SetUniform("uModel", Matrix4x4.CreateScale(0.2f) * Matrix4x4.CreateTranslation(Vector3.UnitX * 2));
+    lampShader?.SetUniform("uView", camera.ViewMatrix);
+    lampShader?.SetUniform("uProjection", camera.ProjectionMatrix);
+    lampBufferedMesh?.Bind();
+    lampBufferedMesh?.Draw();
 
     window?.SwapBuffers();
   }
