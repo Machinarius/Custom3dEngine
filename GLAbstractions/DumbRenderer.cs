@@ -37,6 +37,8 @@ public class DumbRenderer {
   private ShaderProgram lampShader = null;
   private BufferedMesh? lampBufferedMesh = null;
 
+  private Entities.Scene? scene = null;
+
   private void OnLoad() {
     gl = GL.GetApi(window);
     inputContext = window.CreateInput();
@@ -48,24 +50,25 @@ public class DumbRenderer {
     gl?.Enable(GLEnum.DepthTest);
     //gl?.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
 
+    camera = new Entities.Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
+    scene = new Entities.Scene(camera);
+
+    var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
     var lampMesh = new Cube(gl);
     lampBufferedMesh = new BufferedMesh(gl, lampMesh);
     lampBufferedMesh.ActivateVertexAttributes();
     lampShader = new ShaderProgram(gl, "IdentityWithMVPAndNormals.vert", "White.frag");
+    scene.Add(new SceneObject(lampBufferedMesh, lampShader) {
+      Scale = 0.2f,
+      Position = lightPosition
+    });
 
-    camera = new Entities.Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
     model = new Model(gl, Path.Combine("Assets", "textured_cube.obj"));
     shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "BasicTextureWithAlphaDiscard.frag");
     meshes = model.Meshes.Select(mesh => new BufferedMesh(gl, mesh)).ToArray();
     foreach (var mesh in meshes) {
       mesh.ActivateVertexAttributes();
-    }
-
-    shader.Validate();
-
-    foreach(var mesh in meshes ?? Array.Empty<BufferedMesh>()) {
-      mesh.Bind();
-      mesh.SourceMesh.Texture?.Bind();
+      scene.Add(new SceneObject(mesh, shader));
     }
   }
 
@@ -79,22 +82,8 @@ public class DumbRenderer {
   private void OnRender(double deltaTime) {
     gl?.ClearColor(System.Drawing.Color.Gray);
     gl?.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-    shader?.Use();
-    shader?.SetUniform("uModel", Matrix4x4.Identity);
-    shader?.SetUniform("uView", camera.ViewMatrix);
-    shader?.SetUniform("uProjection", camera.ProjectionMatrix);
-    foreach(var mesh in meshes ?? Array.Empty<BufferedMesh>()) {
-      mesh.Bind();
-      mesh.Draw();
-    }
 
-    lampShader?.Use();
-    lampShader?.SetUniform("uModel", Matrix4x4.CreateScale(0.2f) * Matrix4x4.CreateTranslation(Vector3.UnitX * 2));
-    lampShader?.SetUniform("uView", camera.ViewMatrix);
-    lampShader?.SetUniform("uProjection", camera.ProjectionMatrix);
-    lampBufferedMesh?.Bind();
-    lampBufferedMesh?.Draw();
-
+    scene?.Draw(deltaTime, window.Time);
     window?.SwapBuffers();
   }
 

@@ -41,7 +41,7 @@ public class SceneObject {
 
   public void Draw(double deltaTime, double absoluteTime, Camera viewSource) {
     Shaders.Use();
-    Mesh.ActivateVertexAttributes();
+    Mesh.Bind();
     
     foreach (var attr in attributes) {
       attr.WriteToShader(Shaders, deltaTime, absoluteTime);
