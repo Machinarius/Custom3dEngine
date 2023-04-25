@@ -5,7 +5,6 @@ namespace Machinarius.Custom3dEngine;
 
 public class Program {
   public static void Main() {
-
     var options = WindowOptions.Default;
     options.Title = "Machinarius 3D Engine";
     

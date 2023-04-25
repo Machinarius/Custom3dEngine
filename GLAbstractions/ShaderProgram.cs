@@ -47,7 +47,7 @@ public class ShaderProgram : IDisposable {
   }
 
   public void Use() {
-    Console.WriteLine($"Using shader {handle} - {VertexFilename}, {FragmentFilename}");
+    //Console.WriteLine($"Using shader {handle} - {VertexFilename}, {FragmentFilename}");
     gl.UseProgram(handle);
   }
 

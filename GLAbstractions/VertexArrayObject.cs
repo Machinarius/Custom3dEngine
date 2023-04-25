@@ -21,7 +21,7 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
   }
 
   public void Bind() {
-    Console.WriteLine($"Binding VAO {handle}");
+    //Console.WriteLine($"Binding VAO {handle}");
     gl.BindVertexArray(handle);
   }
 
