@@ -65,7 +65,7 @@ public class DumbRenderer {
     });
 
     model = new Model(gl, Path.Combine("Assets", "textured_cube.obj"));
-    shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "BasicTextureWithAlphaDiscard.frag");
+    shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "Lighting.frag");
     meshes = model.Meshes.Select(mesh => new BufferedMesh(gl, mesh)).ToArray();
     foreach (var mesh in meshes) {
       mesh.ActivateVertexAttributes();
@@ -75,8 +75,8 @@ public class DumbRenderer {
       };
 
       // TODO: Diagnose what's wrong with these and Lighting.frag
-      //sceneObject.AttachAttribute(new LitByEmmisive(lightPosition, camera));
-      //sceneObject.AttachAttribute(new SpecularWithTextureMaterial());
+      sceneObject.AttachAttribute(new LitByEmmisive(lightPosition, camera));
+      sceneObject.AttachAttribute(new SpecularWithTextureMaterial());
       scene.Add(sceneObject);
     }
   }

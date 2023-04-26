@@ -1,3 +1,4 @@
+using Machinarius.Custom3dEngine.DebugUtils;
 using Silk.NET.OpenGL;
 
 namespace Machinarius.Custom3dEngine.GLAbstractions;
