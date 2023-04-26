@@ -2,7 +2,6 @@ using Machinarius.Custom3dEngine.DebugUtils;
 using Machinarius.Custom3dEngine.Entities;
 using Machinarius.Custom3dEngine.Entities.Attributes;
 using Machinarius.Custom3dEngine.Meshes;
-using Silk.NET.Assimp;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -35,7 +34,7 @@ public class DumbRenderer {
   private ShaderProgram? shader = null;
   private BufferedMesh[]? meshes = null;
 
-  private ShaderProgram lampShader = null;
+  private ShaderProgram? lampShader = null;
   private BufferedMesh? lampBufferedMesh = null;
 
   private Entities.Scene? scene = null;
@@ -74,7 +73,6 @@ public class DumbRenderer {
         Scale = 0.5f
       };
 
-      // TODO: Diagnose what's wrong with these and Lighting.frag
       sceneObject.AttachAttribute(new LitByEmmisive(lightPosition, camera));
       sceneObject.AttachAttribute(new SpecularWithTextureMaterial());
       scene.Add(sceneObject);
