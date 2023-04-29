@@ -32,8 +32,8 @@ public class HUD: IDisposable {
   private Matrix4x4 modelMatrix = Matrix4x4.CreateScale(0.3f);
 
   private void CalculateProjectionMatrix(Vector2D<int> viewportSize) {
-    projectionMatrix = Matrix4x4.CreateOrthographic(
-      viewportSize.X, viewportSize.Y, Camera.NearPlaneDistance, Camera.FarPlaneDistance
+    projectionMatrix = Matrix4x4.CreateOrthographicOffCenter(
+      0, viewportSize.X, viewportSize.Y, 0, -1, 1
     );
   }
 
@@ -43,7 +43,7 @@ public class HUD: IDisposable {
 
   public void Draw() {
     shader.Use();
-    //shader.SetUniform("uProjection", projectionMatrix);
+    shader.SetUniform("uProjection", projectionMatrix);
     shader.SetUniform("uModel", modelMatrix);
     
     quadMesh.Bind();
