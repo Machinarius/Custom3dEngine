@@ -56,8 +56,8 @@ public class SceneObject {
     Mesh.Bind();
     Shaders.Use();
 
-    Mesh.SourceMesh.DiffuseTexture?.Bind(Silk.NET.OpenGL.TextureUnit.Texture0);
-    Mesh.SourceMesh.SpecularTexture?.Bind(Silk.NET.OpenGL.TextureUnit.Texture1);
+    Mesh.SourceMesh.DiffuseTexture?.Bind(TextureUnit.Texture0);
+    Mesh.SourceMesh.SpecularTexture?.Bind(TextureUnit.Texture1);
     
     foreach (var attr in attributes) {
       attr.WriteToShader(Shaders, deltaTime, absoluteTime);
