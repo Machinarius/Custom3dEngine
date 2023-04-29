@@ -49,6 +49,8 @@ public class DumbRenderer {
 #endif
 
     gl?.Enable(GLEnum.DepthTest);
+    gl?.FrontFace(GLEnum.CW);
+    gl?.CullFace(GLEnum.Back);
     //gl?.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
 
     camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);

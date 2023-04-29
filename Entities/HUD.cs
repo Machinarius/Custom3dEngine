@@ -33,7 +33,7 @@ public class HUD: IDisposable {
 
   private void CalculateProjectionMatrix(Vector2D<int> viewportSize) {
     projectionMatrix = Matrix4x4.CreateOrthographic(
-  viewportSize.X, viewportSize.Y, -1, 1
+    viewportSize.X, viewportSize.Y, -1, 1
     );
   }
 
