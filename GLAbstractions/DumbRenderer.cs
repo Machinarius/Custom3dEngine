@@ -48,6 +48,7 @@ public class DumbRenderer {
     gl?.EnableDebugOutput();
 #endif
 
+    gl?.Enable(GLEnum.CullFace);
     gl?.Enable(GLEnum.DepthTest);
     gl?.FrontFace(GLEnum.CW);
     gl?.CullFace(GLEnum.Back);

@@ -28,8 +28,9 @@ public class Model {
   }
 
   private unsafe void LoadModelData(string path) {
-    var loadFlags = (uint)(
-      PostProcessSteps.Triangulate
+    const uint loadFlags = (uint)(
+      PostProcessSteps.Triangulate |
+      PostProcessSteps.FlipWindingOrder
     );
     var scene = assimp.ImportFile(path, loadFlags);
 
