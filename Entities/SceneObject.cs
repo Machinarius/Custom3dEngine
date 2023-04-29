@@ -64,6 +64,9 @@ public class SceneObject {
 
     Shaders.Validate();
     Mesh.Draw();
+    
+    Mesh.Unbind();
+    Mesh.SourceMesh.DiffuseTexture?.Unbind();
   }
 
   public void Dispose() {

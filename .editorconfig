@@ -72,3 +72,8 @@ csharp_new_line_between_query_expression_clauses=false
 tab_width=2
 indent_size=2
 end_of_line=lf
+
+[*.{vert,frag}]
+tab_width = 2
+indent_size = 2
+end_of_line = lf

@@ -34,8 +34,8 @@ public class Quad : IMesh {
   }
 
   public unsafe void Draw() {
-    //gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
-    gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
+    gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
+    //gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
   }
 
   public void Dispose() { }

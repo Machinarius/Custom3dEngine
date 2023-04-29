@@ -56,7 +56,7 @@ public class DumbRenderer {
 
     var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
     var lampMesh = new Cube(gl);
-    lampBufferedMesh = new BufferedMesh(gl, lampMesh);
+    lampBufferedMesh = new BufferedMesh(gl, lampMesh, "LampMesh");
     lampBufferedMesh.ActivateVertexAttributes();
     lampShader = new ShaderProgram(gl, "IdentityWithMVPAndNormals.vert", "White.frag");
     scene.Add(new SceneObject(lampBufferedMesh, lampShader) {
@@ -64,10 +64,9 @@ public class DumbRenderer {
       Position = lightPosition
     });
     
-    hud = new HUD(window, gl);
     model = new Model(gl, Path.Combine("Assets", "textured_cube.obj"));
     shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "Lighting.frag");
-    meshes = model.Meshes.Select(mesh => new BufferedMesh(gl, mesh)).ToArray();
+    meshes = model.Meshes.Select(mesh => new BufferedMesh(gl, mesh, "ModelMesh")).ToArray();
     foreach (var mesh in meshes) {
       mesh.ActivateVertexAttributes();
 
@@ -79,6 +78,7 @@ public class DumbRenderer {
       sceneObject.AttachAttribute(new SpecularWithTextureMaterial());
       scene.Add(sceneObject);
     }
+    hud = new HUD(window, gl);
   }
 
   private void OnUpdate(double deltaTime) {

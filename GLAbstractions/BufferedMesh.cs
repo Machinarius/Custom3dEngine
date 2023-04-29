@@ -19,6 +19,10 @@ public class BufferedMesh : IDisposable {
     VertexArray = new VertexArrayObject<float, uint>(gl, VertexBuffer, ElementBuffer);
   }
 
+  public BufferedMesh(GL gl, IMesh sourceMesh, string debugTag): this(gl, sourceMesh) {
+    Console.WriteLine("Created BufferedMesh: " + debugTag);
+  }
+
   public void ActivateVertexAttributes() {
     for (uint i = 0; i < SourceMesh.Attributes.Length; i++) {
       var descriptor = SourceMesh.Attributes[i];

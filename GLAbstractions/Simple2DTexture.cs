@@ -33,6 +33,10 @@ public class Simple2DTexture : IDisposable {
     gl.BindTexture(TextureTarget.Texture2D, handle);
   }
 
+  public void Unbind() {
+    gl.BindTexture(TextureTarget.Texture2D, 0);
+  }
+
   private unsafe void LoadTextureFromFile(string filePath) {
     using var image = Image.Load<Rgba32>(filePath);
     //Reserve enough memory from the gpu for the whole image

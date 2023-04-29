@@ -24,13 +24,12 @@ public class HUD: IDisposable {
     CalculateProjectionMatrix(window.Size);
 
     shader = new ShaderProgram(gl, "HUDElement.vert", "White.frag");
-    quadMesh = new BufferedMesh(gl, new Quad(gl));
+    quadMesh = new BufferedMesh(gl, new Quad(gl), "HUD quad");
     quadMesh.ActivateVertexAttributes();
-    quadMesh.Unbind();
   }
 
   private Matrix4x4 projectionMatrix;
-  private Matrix4x4 modelMatrix = Matrix4x4.CreateScale(0.5f);
+  private Matrix4x4 modelMatrix = Matrix4x4.CreateScale(0.3f);
 
   private void CalculateProjectionMatrix(Vector2D<int> viewportSize) {
     projectionMatrix = Matrix4x4.CreateOrthographic(
@@ -44,7 +43,7 @@ public class HUD: IDisposable {
 
   public void Draw() {
     shader.Use();
-    shader.SetUniform("uProjection", projectionMatrix);
+    //shader.SetUniform("uProjection", projectionMatrix);
     shader.SetUniform("uModel", modelMatrix);
     
     quadMesh.Bind();

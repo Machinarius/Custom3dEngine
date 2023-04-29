@@ -11,10 +11,13 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
   public BufferObject(GL gl, BufferTargetARB bufferType, ReadOnlySpan<TDataType> data) {
     this.gl = gl;
     this.bufferType = bufferType;
-
+    
+    Console.WriteLine($"Creating BufferObject ${handle} of type {bufferType}.");
+    
     handle = gl.GenBuffer();
     Bind();
     UploadDataToBuffer(data);
+    Unbind();
   }
 
   private unsafe void UploadDataToBuffer(ReadOnlySpan<TDataType> data) {

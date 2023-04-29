@@ -13,10 +13,13 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
 
     handle = gl.GenVertexArray();
 
+    Console.WriteLine($"Creating VertexArrayObject ${handle}.");
+    
     // Bind these buffers to this VAO
     Bind();
     vertexBuffer.Bind();
     elementBuffer?.Bind();
+    Unbind();
   }
 
   public void Bind() {
@@ -50,9 +53,11 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
   ) {
     var elementSize = (uint)sizeof(TVertexType);
     Console.WriteLine($"Activating vertex attribute at location {index}, with {size} elements, every {stride} elements, starting from {offset}, with element size of {elementSize} bytes.");
-
+    
+    Bind();
     gl.EnableVertexAttribArray(index);
     gl.VertexAttribPointer(index, size, type, false, stride * elementSize, (void*)(offset * elementSize));
+    Unbind();
   }
   
   public void Dispose() {
