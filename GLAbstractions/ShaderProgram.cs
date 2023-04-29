@@ -58,8 +58,8 @@ public class ShaderProgram : IDisposable {
     gl.Uniform1(GetUniformLocation(name), value);
   }
 
-  public unsafe void SetUniform(string name, Matrix4x4 value) {
-    gl.UniformMatrix4(GetUniformLocation(name), 1, false, (float*) &value);
+  public unsafe void SetUniform(string name, Matrix4x4 value, bool transpose = false) {
+    gl.UniformMatrix4(GetUniformLocation(name), 1, transpose, (float*) &value);
   }
 
   public void SetUniform(string name, Vector3 value) {
