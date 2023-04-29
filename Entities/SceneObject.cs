@@ -1,10 +1,13 @@
 using Machinarius.Custom3dEngine.Entities.Attributes;
 using Machinarius.Custom3dEngine.GLAbstractions;
+using Machinarius.Custom3dEngine.Meshes;
+using Silk.NET.OpenGL;
 using System.Numerics;
 
 namespace Machinarius.Custom3dEngine.Entities;
 
 public class SceneObject {
+  private readonly GL gl;
   public Vector3 Position { get; set; } = new Vector3(0, 0, 0);
   public float Scale { get; set; } = 1f;
   public Quaternion Rotation { get; set; } = Quaternion.Identity;
@@ -22,7 +25,8 @@ public class SceneObject {
 
   private readonly List<IObjectAttribute> attributes;
 
-  public SceneObject(BufferedMesh mesh, ShaderProgram shaders) {
+  public SceneObject(GL gl, BufferedMesh mesh, ShaderProgram shaders) {
+    this.gl = gl ?? throw new ArgumentNullException(nameof(gl));
     attributes = new List<IObjectAttribute>();
 
     Mesh = mesh ?? throw new ArgumentNullException(nameof(mesh));
@@ -40,6 +44,15 @@ public class SceneObject {
   }
 
   public void Draw(double deltaTime, double absoluteTime, Camera viewSource) {
+    var windingFlag = Mesh.SourceMesh.WindingOrder switch {
+      WindingOrder.Clockwise => GLEnum.CW,
+      WindingOrder.CounterClockwise => GLEnum.Ccw,
+      _ => throw new ArgumentOutOfRangeException(
+          "Invalid winding order for mesh: " + Mesh.SourceMesh.WindingOrder
+        )
+    };
+    gl.FrontFace(windingFlag);
+    
     Mesh.Bind();
     Shaders.Use();
 

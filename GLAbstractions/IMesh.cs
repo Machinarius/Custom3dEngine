@@ -7,4 +7,5 @@ public interface IMesh : IDisposable {
   Simple2DTexture? DiffuseTexture { get; }
   Simple2DTexture? SpecularTexture { get; }
   void Draw();
+  WindingOrder WindingOrder => WindingOrder.Clockwise;
 }

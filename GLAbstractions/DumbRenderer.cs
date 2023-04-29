@@ -62,7 +62,7 @@ public class DumbRenderer {
     lampBufferedMesh = new BufferedMesh(gl, lampMesh, "LampMesh");
     lampBufferedMesh.ActivateVertexAttributes();
     lampShader = new ShaderProgram(gl, "IdentityWithMVPAndNormals.vert", "White.frag");
-    scene.Add(new SceneObject(lampBufferedMesh, lampShader) {
+    scene.Add(new SceneObject(gl, lampBufferedMesh, lampShader) {
       Scale = 0.2f,
       Position = lightPosition
     });
@@ -73,7 +73,7 @@ public class DumbRenderer {
     foreach (var mesh in meshes) {
       mesh.ActivateVertexAttributes();
 
-      var sceneObject = new SceneObject(mesh, shader) {
+      var sceneObject = new SceneObject(gl, mesh, shader) {
         Scale = 0.5f
       };
 
