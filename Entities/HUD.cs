@@ -22,23 +22,35 @@ public class HUD: IDisposable {
 
     window.Resize += OnWindowResize;
     CalculateProjectionMatrix(window.Size);
+    CalculateModelMatrix(window.Size);
 
     shader = new ShaderProgram(gl, "HUDElement.vert", "White.frag");
     quadMesh = new BufferedMesh(gl, new Quad(gl), "HUD quad");
     quadMesh.ActivateVertexAttributes();
   }
 
-  private Matrix4x4 projectionMatrix;
-  private Matrix4x4 modelMatrix = Matrix4x4.CreateScale(200f);
+  private Matrix4x4 projectionMatrix = Matrix4x4.Identity;
+  private Matrix4x4 modelMatrix = Matrix4x4.Identity;
 
   private void CalculateProjectionMatrix(Vector2D<int> viewportSize) {
     projectionMatrix = Matrix4x4.CreateOrthographic(
-    viewportSize.X, viewportSize.Y, -1, 1
+      viewportSize.X, viewportSize.Y, -1, 1
     );
+  }
+
+  private void CalculateModelMatrix(Vector2D<int> viewportSize) {
+    // Normalize the pixel size of the quad to a 200px square
+    modelMatrix = Matrix4x4.CreateScale(200f);
+
+    // The translation point is the middle of the screen!
+    var left = -((float)viewportSize.X / 2) + 110f;
+    var top = -((float)viewportSize.Y / 2) + 110f;
+    modelMatrix *= Matrix4x4.CreateTranslation(left, top, 0);
   }
 
   private void OnWindowResize(Vector2D<int> size) {
     CalculateProjectionMatrix(size);
+    CalculateModelMatrix(size);
   }
 
   public void Draw() {
