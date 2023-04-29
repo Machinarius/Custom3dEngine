@@ -92,18 +92,14 @@ public class Model {
       indices.Add(face.MIndices[2]);
     }
 
-    Console.WriteLine("Face count: " + faceCount);
-    Console.WriteLine("Indices");
-    Console.WriteLine(JsonSerializer.Serialize(indices));
-
     var material = scene->MMaterials[mesh->MMaterialIndex];
     var diffuseTextures = LoadMaterialTextures(material, TextureType.Diffuse);
     var specularTextures = LoadMaterialTextures(material, TextureType.Specular);
     // var normalTextures = LoadMaterialTextures(material, TextureType.Normals);
     // var heightTextures = LoadMaterialTextures(material, TextureType.Height);
 
-    var diffuse = diffuseTextures?.FirstOrDefault();
-    var specular = specularTextures?.FirstOrDefault();
+    var diffuse = diffuseTextures.FirstOrDefault();
+    var specular = specularTextures.FirstOrDefault();
     
     var meshData = BuildMeshData(vertices);
     var result = new DataMesh(gl, meshData.Attributes, meshData.Vertices, indices.ToArray(), diffuse, specular);
@@ -153,19 +149,18 @@ public class Model {
     }
 
     var attributes = new List<VertexAttributeDescriptor>() {
-      new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, attributeStride, 0, VertexAttributePayloadType.Position),
+      new(3, VertexAttribPointerType.Float, attributeStride, 0, VertexAttributePayloadType.Position),
     };
 
     if (vertices[0].Normal.HasValue) {
-      attributes.Add(new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, attributeStride, 3, VertexAttributePayloadType.Normal));
+      attributes.Add(new (3, VertexAttribPointerType.Float, attributeStride, 3, VertexAttributePayloadType.Normal));
     }
 
     if (vertices[0].UvCoordinates.HasValue) {
       var offset = vertices[0].Normal.HasValue ? 6 : 3;
-      attributes.Add(new VertexAttributeDescriptor(2, VertexAttribPointerType.Float, attributeStride, offset, VertexAttributePayloadType.TextureCoordinates));
+      attributes.Add(new (2, VertexAttribPointerType.Float, attributeStride, offset, VertexAttributePayloadType.TextureCoordinates));
     }
 
-    Console.WriteLine($"Vertex attributes: {JsonSerializer.Serialize(attributes)}");
     var vertexData = new float[vertices.Length * attributeStride];
     for (var i = 0; i < vertices.Length; i++) {
       var vertex = vertices[i];
@@ -182,13 +177,10 @@ public class Model {
 
       if (vertex.UvCoordinates.HasValue) {
         vertexData[offset++] = vertex.UvCoordinates.Value.X;
-        vertexData[offset++] = vertex.UvCoordinates.Value.Y;
+        vertexData[offset] = vertex.UvCoordinates.Value.Y;
       }
     }
 
-    // Try rendering this mesh manually to see if it works
-    Console.WriteLine("Vertex data");
-    Console.WriteLine(JsonSerializer.Serialize(vertexData));
     return new MeshData(vertexData, attributes.ToArray());
   }
 

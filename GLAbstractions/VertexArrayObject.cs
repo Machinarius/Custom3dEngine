@@ -23,6 +23,10 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
     gl.BindVertexArray(handle);
   }
 
+  public void Unbind() {
+    gl.BindVertexArray(0);
+  }
+
   /**
     <summary>
     Defines an array of generic vertex attribute data.

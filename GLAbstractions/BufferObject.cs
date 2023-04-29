@@ -30,6 +30,10 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
     gl.BindBuffer(bufferType, handle);
   }
 
+  public void Unbind() {
+    gl.BindBuffer(bufferType, 0);
+  }
+
   public void Dispose() {
     gl.DeleteBuffer(handle);
   }

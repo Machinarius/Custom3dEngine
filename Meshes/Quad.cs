@@ -16,7 +16,7 @@ public class Quad : IMesh {
       0.5f,  0.5f, 0.0f,
       0.5f, -0.5f, 0.0f,
      -0.5f, -0.5f, 0.0f,
-     -0.5f,  0.5f, 0.5f
+     -0.5f,  0.5f, 0.0f
   };
 
   public uint[] Indices => new uint[] {
@@ -34,7 +34,8 @@ public class Quad : IMesh {
   }
 
   public unsafe void Draw() {
-    gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
+    //gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
+    gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
   }
 
   public void Dispose() { }

@@ -29,7 +29,7 @@ public class DumbRenderer {
 
   private GL? gl = null;
   private IInputContext? inputContext = null;
-  private Entities.Camera? camera = null;
+  private Camera? camera = null;
   private Model? model = null;
   private ShaderProgram? shader = null;
   private BufferedMesh[]? meshes = null;
@@ -37,7 +37,8 @@ public class DumbRenderer {
   private ShaderProgram? lampShader = null;
   private BufferedMesh? lampBufferedMesh = null;
 
-  private Entities.Scene? scene = null;
+  private Scene? scene = null;
+  private HUD? hud = null;
 
   private void OnLoad() {
     gl = GL.GetApi(window);
@@ -50,8 +51,8 @@ public class DumbRenderer {
     gl?.Enable(GLEnum.DepthTest);
     //gl?.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
 
-    camera = new Entities.Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
-    scene = new Entities.Scene(camera);
+    camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
+    scene = new Scene(camera);
 
     var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
     var lampMesh = new Cube(gl);
@@ -62,7 +63,8 @@ public class DumbRenderer {
       Scale = 0.2f,
       Position = lightPosition
     });
-
+    
+    hud = new HUD(window, gl);
     model = new Model(gl, Path.Combine("Assets", "textured_cube.obj"));
     shader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "Lighting.frag");
     meshes = model.Meshes.Select(mesh => new BufferedMesh(gl, mesh)).ToArray();
@@ -91,6 +93,7 @@ public class DumbRenderer {
     gl?.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
     scene?.Draw(deltaTime, window.Time);
+    hud?.Draw();
     window?.SwapBuffers();
   }
 

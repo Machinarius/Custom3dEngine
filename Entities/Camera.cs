@@ -6,6 +6,9 @@ using System.Numerics;
 namespace Machinarius.Custom3dEngine.Entities;
 
 public class Camera : IDisposable {
+  public const float NearPlaneDistance = 0.1f;
+  public const float FarPlaneDistance = 1000;
+
   private const float LookSensitivity = 0.1f;
   private const float MoveSpeed = 1.5f;
 
@@ -30,7 +33,7 @@ public class Camera : IDisposable {
   private float ViewportAspectRatio => window.Size.X / (float) window.Size.Y;
 
   public Matrix4x4 ProjectionMatrix => Matrix4x4.CreatePerspectiveFieldOfView(
-    MathHelper.DegreesToRadians(Zoom), ViewportAspectRatio, 0.1f, 100f
+    MathHelper.DegreesToRadians(Zoom), ViewportAspectRatio, NearPlaneDistance, FarPlaneDistance
   );
 
   public Camera(IWindow window, IInputContext input) : 
