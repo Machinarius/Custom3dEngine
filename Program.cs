@@ -9,7 +9,7 @@ public class Program {
     options.Title = "My 3d engine";
 
     using var window = Window.Create(options);
-    var renderer = new DumbRenderer(window);
+    var renderer = new RenderConfigurator(window);
     renderer.Run();
   }
 }
