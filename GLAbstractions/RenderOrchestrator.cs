@@ -44,8 +44,6 @@ public class RenderOrchestrator {
 
     gl.Enable(GLEnum.CullFace);
     gl.Enable(GLEnum.DepthTest);
-    gl.FrontFace(GLEnum.CW);
-    gl.CullFace(GLEnum.Back);
     //gl?.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
   }
 

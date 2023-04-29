@@ -44,14 +44,15 @@ public class SceneObject {
   }
 
   public void Draw(double deltaTime, double absoluteTime, Camera viewSource) {
-    var windingFlag = Mesh.SourceMesh.WindingOrder switch {
-      WindingOrder.Clockwise => GLEnum.CW,
-      WindingOrder.CounterClockwise => GLEnum.Ccw,
+    var (windingFlag, faceFlag) = Mesh.SourceMesh.WindingOrder switch {
+      WindingOrder.Clockwise => (GLEnum.CW, GLEnum.Back),
+      WindingOrder.CounterClockwise => (GLEnum.Ccw, GLEnum.Front),
       _ => throw new ArgumentOutOfRangeException(
           "Invalid winding order for mesh: " + Mesh.SourceMesh.WindingOrder
         )
     };
     gl.FrontFace(windingFlag);
+    gl.CullFace(faceFlag);
     
     Mesh.Bind();
     Shaders.Use();
