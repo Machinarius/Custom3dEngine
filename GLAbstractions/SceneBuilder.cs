@@ -14,7 +14,7 @@ public class SceneBuilder {
     var scene = new Scene(camera);
 
     var lightPosition = new Vector3(1.2f, 1.0f, 2.0f);
-    var lampMesh = new Cube(gl);
+    var lampMesh = new CubeWithNormalsAndUV(gl);
     var lampBufferedMesh = new BufferedMesh(gl, lampMesh, "LampMesh");
     lampBufferedMesh.ActivateVertexAttributes();
     var lampShader = new ShaderProgram(gl, "IdentityWithMVPAndNormals.vert", "White.frag");
