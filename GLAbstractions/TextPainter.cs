@@ -26,7 +26,7 @@ public class TextPainter : IDisposable {
     
     var fonts = new FontCollection();
     fonts.Add("Assets/Fonts/Montserrat/Montserrat-VariableFont.ttf");
-    montserratFont = fonts.Get("Montserrat Thin").CreateFont(10, FontStyle.Regular);
+    montserratFont = fonts.Get("Montserrat Thin").CreateFont(50, FontStyle.Regular);
     
     textOptions = BuildTextOptions(window.Size);
     projectionMatrix = BuildProjectionMatrix(window.Size);
@@ -45,7 +45,7 @@ public class TextPainter : IDisposable {
     return new TextOptions(montserratFont) {
       HorizontalAlignment = HorizontalAlignment.Left,
       VerticalAlignment = VerticalAlignment.Top,
-      WrappingLength = bounds.X
+      WrappingLength = bounds.X,
     };
   }
   
@@ -57,7 +57,7 @@ public class TextPainter : IDisposable {
 
   private TextOptions textOptions;
   private Matrix4x4 projectionMatrix;
-  private Dictionary<char, Simple2DTexture> glyphCache = new();
+  private readonly Dictionary<char, Simple2DTexture> glyphCache = new();
 
   public void RenderText(
     string text,
@@ -72,19 +72,21 @@ public class TextPainter : IDisposable {
     for (var i = 0; i < text.Length; i++) {
       var character = text[i];
       if (character == ' ') {
-        continue; // TODO: There are more non-printable characters!
+        continue; // TODO: There are more white-space characters!
       }
       var glyph = glyphs[i];
 
+      // https://github.com/SixLabors/Samples/blob/main/ImageSharp/DrawingTextAlongAPath/Program.cs
       if (!glyphCache.TryGetValue(character, out var glyphTexture)) {
         var normalizedWidth = (int)Math.Ceiling(glyph.Bounds.Width);
         var normalizedHeight = (int)Math.Ceiling(glyph.Bounds.Height);
-        Console.WriteLine($"Generating a {normalizedWidth}x{normalizedHeight} texture for {character}");
-        
+
+        // Reset the glyph back to the origin
+        glyph = glyph.Transform(Matrix3x2.CreateTranslation(-glyph.Bounds.Location));
         using var glyphImage = new Image<Rgba32>(normalizedWidth, normalizedHeight);
-        glyphImage.Mutate(ctx => ctx.Fill(Color.White, glyph));
-        using var debugOutput = File.Create($"glyph{character}.png");
-        glyphImage.SaveAsPng(debugOutput);
+        glyphImage.Mutate(ctx => 
+          ctx.Fill(Color.Red, glyph)
+        );
         
         glyphTexture = new Simple2DTexture(gl, glyphImage);
         glyphCache.Add(character, glyphTexture); 
@@ -99,8 +101,11 @@ public class TextPainter : IDisposable {
         positionInScreen.Y + glyph.Bounds.Y, 
         0
       );
-      textShader.SetUniform("uModel", modelMatrix);
+      
       glyphTexture.Bind();
+      textShader.SetUniform("uModel", modelMatrix);
+      textShader.SetUniform("uTexture", 0);
+      
       glyphTarget.Draw();
       glyphTexture.Unbind();
     }
