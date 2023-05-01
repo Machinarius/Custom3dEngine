@@ -18,6 +18,8 @@ public class HeadsUpDisplay: IDisposable {
   private readonly ImGuiController imGuiController;
   private readonly IInputContext inputContext;
 
+  private TextPainter textPainter;
+
   // https://www.mbsoftworks.sk/tutorials/opengl4/009-orthographic-2D-projection/
   public HeadsUpDisplay(IWindow window, GL gl, Camera camera) {
     if (gl is null) {
@@ -38,8 +40,10 @@ public class HeadsUpDisplay: IDisposable {
     CalculateModelMatrix(window.Size);
 
     shader = new ShaderProgram(gl, "HUDElement.vert", "White.frag");
-    quadMesh = new BufferedMesh(gl, new Quad(gl), "HUD quad");
+    quadMesh = new BufferedMesh(gl, new Quad(gl));
     quadMesh.ActivateVertexAttributes();
+
+    textPainter = new TextPainter(window, gl);
   }
 
   private Matrix4x4 projectionMatrix = Matrix4x4.Identity;
@@ -79,10 +83,13 @@ public class HeadsUpDisplay: IDisposable {
     
     quadMesh.Bind();
     quadMesh.Draw();
+    quadMesh.Unbind();
 
     if (debugVisible) {
       RenderDebugHud();
     }
+    
+    textPainter.RenderText("Hello world", new Vector2D<float>(0,0));
   }
 
   private void RenderDebugHud() {

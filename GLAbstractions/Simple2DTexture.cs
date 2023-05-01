@@ -27,6 +27,13 @@ public class Simple2DTexture : IDisposable {
     Bind();
     LoadTextureFromRawData(rawTextureData, width, height);
   }
+  public Simple2DTexture(GL gl, Image<Rgba32> sourceImage) {
+    this.gl = gl;
+
+    handle = gl.GenTexture();
+    Bind();
+    LoadImageToTexture(sourceImage);
+  }
 
   public void Bind(TextureUnit textureSlot = TextureUnit.Texture0) {
     gl.ActiveTexture(textureSlot);
@@ -37,20 +44,26 @@ public class Simple2DTexture : IDisposable {
     gl.BindTexture(TextureTarget.Texture2D, 0);
   }
 
-  private unsafe void LoadTextureFromFile(string filePath) {
+  private void LoadTextureFromFile(string filePath) {
     using var image = Image.Load<Rgba32>(filePath);
+    LoadImageToTexture(image);
+    SetParameters();
+  }
+
+  private unsafe void LoadImageToTexture(Image<Rgba32> image) {
     //Reserve enough memory from the gpu for the whole image
-    gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint) image.Width, (uint) image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null);
+    gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint)image.Width, (uint)image.Height, 0,
+      PixelFormat.Rgba, PixelType.UnsignedByte, null);
     image.ProcessPixelRows(dataReader => {
       for (var y = 0; y < dataReader.Height; y++) {
         //ImageSharp 2 does not store images in contiguous memory by default, so we must send the image row by row
         fixed (void* data = dataReader.GetRowSpan(y)) {
           //Loading the row of pixel data
-          gl.TexSubImage2D(TextureTarget.Texture2D, 0, 0, y, (uint)dataReader.Width, 1, PixelFormat.Rgba, PixelType.UnsignedByte, data);
+          gl.TexSubImage2D(TextureTarget.Texture2D, 0, 0, y, (uint)dataReader.Width, 1, PixelFormat.Rgba,
+            PixelType.UnsignedByte, data);
         }
       }
     });
-    SetParameters();
   }
 
   private unsafe void LoadTextureFromRawData(ReadOnlySpan<byte> rawTextureData, uint width, uint height) {
