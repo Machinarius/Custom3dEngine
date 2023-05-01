@@ -25,7 +25,7 @@ public class RenderOrchestrator {
     inputContext = window.CreateInput();
     camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
     scene = new SceneBuilder().GetScene(gl, camera, window);
-    hud = new HUD(window, gl);
+    hud = new HUD(window, gl, camera);
       
     ConfigureOpenGl();
   }
@@ -49,6 +49,7 @@ public class RenderOrchestrator {
 
   private void OnUpdate(double deltaTime) {
     camera.Update(deltaTime);
+    hud.Update(deltaTime);
     if (inputContext.Keyboards.FirstOrDefault()?.IsKeyPressed(Key.Escape) ?? false) {
       window.Close();
     }

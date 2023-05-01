@@ -1,7 +1,10 @@
+using ImGuiNET;
 using Machinarius.Custom3dEngine.GLAbstractions;
 using Machinarius.Custom3dEngine.Meshes;
+using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
+using Silk.NET.OpenGL.Extensions.ImGui;
 using Silk.NET.Windowing;
 using System.Numerics;
 
@@ -9,16 +12,22 @@ namespace Machinarius.Custom3dEngine.Entities;
 
 public class HUD: IDisposable {
   private readonly IWindow window;
+  private readonly Camera camera;
   private readonly BufferedMesh quadMesh;
   private readonly ShaderProgram shader;
+  private readonly ImGuiController imGuiController;
 
   // https://www.mbsoftworks.sk/tutorials/opengl4/009-orthographic-2D-projection/
-  public HUD(IWindow window, GL gl) {
+  public HUD(IWindow window, GL gl, Camera camera) {
     if (gl is null) {
       throw new ArgumentNullException(nameof(gl));
     }
 
     this.window = window ?? throw new ArgumentNullException(nameof(window));
+    this.camera = camera ?? throw new ArgumentNullException(nameof(camera));
+    
+    imGuiController = new ImGuiController(gl, window, window.CreateInput());
+    imGuiController.MakeCurrent();
 
     window.Resize += OnWindowResize;
     CalculateProjectionMatrix(window.Size);
@@ -53,6 +62,10 @@ public class HUD: IDisposable {
     CalculateModelMatrix(size);
   }
 
+  public void Update(double deltaTime) {
+    imGuiController.Update((float)deltaTime);
+  }
+
   public void Draw() {
     shader.Use();
     shader.SetUniform("uProjection", projectionMatrix, false);
@@ -60,6 +73,12 @@ public class HUD: IDisposable {
     
     quadMesh.Bind();
     quadMesh.Draw();
+
+    // https://github.com/ImGuiNET/ImGui.NET/blob/master/src/ImGui.NET.SampleProgram/Program.cs
+    ImGui.Begin("Hello, world!", ImGuiWindowFlags.AlwaysAutoResize);
+    ImGui.Text($"Camera position: {camera.Position}");
+    
+    imGuiController.Render();
   }
 
   public void Dispose() {
