@@ -16,7 +16,7 @@ public class RenderOrchestrator {
   private readonly Camera camera;
 
   private readonly Scene scene;
-  private readonly HUD hud;
+  private readonly HeadsUpDisplay headsUpDisplay;
 
   public RenderOrchestrator(IWindow window) {
     this.window = window;
@@ -25,7 +25,7 @@ public class RenderOrchestrator {
     inputContext = window.CreateInput();
     camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
     scene = new SceneBuilder().GetScene(gl, camera, window);
-    hud = new HUD(window, gl, camera);
+    headsUpDisplay = new HeadsUpDisplay(window, gl, camera);
       
     ConfigureOpenGl();
   }
@@ -49,7 +49,7 @@ public class RenderOrchestrator {
 
   private void OnUpdate(double deltaTime) {
     camera.Update(deltaTime);
-    hud.Update(deltaTime);
+    headsUpDisplay.Update(deltaTime);
     if (inputContext.Keyboards.FirstOrDefault()?.IsKeyPressed(Key.Escape) ?? false) {
       window.Close();
     }
@@ -60,7 +60,7 @@ public class RenderOrchestrator {
     gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
     scene.Draw(deltaTime, window.Time);
-    hud.Draw();
+    headsUpDisplay.Draw();
     window.SwapBuffers();
   }
 

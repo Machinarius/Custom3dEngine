@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace Machinarius.Custom3dEngine.Entities;
 
-public class HUD: IDisposable {
+public class HeadsUpDisplay: IDisposable {
   private readonly IWindow window;
   private readonly Camera camera;
   private readonly BufferedMesh quadMesh;
@@ -19,7 +19,7 @@ public class HUD: IDisposable {
   private readonly IInputContext inputContext;
 
   // https://www.mbsoftworks.sk/tutorials/opengl4/009-orthographic-2D-projection/
-  public HUD(IWindow window, GL gl, Camera camera) {
+  public HeadsUpDisplay(IWindow window, GL gl, Camera camera) {
     if (gl is null) {
       throw new ArgumentNullException(nameof(gl));
     }
