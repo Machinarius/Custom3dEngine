@@ -16,6 +16,7 @@ public class HUD: IDisposable {
   private readonly BufferedMesh quadMesh;
   private readonly ShaderProgram shader;
   private readonly ImGuiController imGuiController;
+  private readonly IInputContext inputContext;
 
   // https://www.mbsoftworks.sk/tutorials/opengl4/009-orthographic-2D-projection/
   public HUD(IWindow window, GL gl, Camera camera) {
@@ -25,6 +26,9 @@ public class HUD: IDisposable {
 
     this.window = window ?? throw new ArgumentNullException(nameof(window));
     this.camera = camera ?? throw new ArgumentNullException(nameof(camera));
+
+    inputContext = window.CreateInput();
+    ConfigureKeyboardListeners();
     
     imGuiController = new ImGuiController(gl, window, window.CreateInput());
     imGuiController.MakeCurrent();
@@ -66,6 +70,8 @@ public class HUD: IDisposable {
     imGuiController.Update((float)deltaTime);
   }
 
+  private bool debugVisible;
+
   public void Draw() {
     shader.Use();
     shader.SetUniform("uProjection", projectionMatrix, false);
@@ -74,11 +80,45 @@ public class HUD: IDisposable {
     quadMesh.Bind();
     quadMesh.Draw();
 
+    if (debugVisible) {
+      RenderDebugHud();
+    }
+  }
+
+  private void RenderDebugHud() {
     // https://github.com/ImGuiNET/ImGui.NET/blob/master/src/ImGui.NET.SampleProgram/Program.cs
-    ImGui.Begin("Hello, world!", ImGuiWindowFlags.AlwaysAutoResize);
+    ImGui.Begin("Debug", 
+      ImGuiWindowFlags.AlwaysAutoResize |
+      ImGuiWindowFlags.NoDecoration
+    );
     ImGui.Text($"Camera position: {camera.Position}");
     
     imGuiController.Render();
+  }
+
+  private void ConfigureKeyboardListeners() {
+    var mainKeyboard = inputContext.Keyboards.FirstOrDefault();
+    if (mainKeyboard == null) {
+      return;
+    }
+
+    mainKeyboard.KeyDown += OnKeyDown;
+  }
+  
+  private DateTime lastKeyPress = DateTime.Now;
+
+  private void OnKeyDown(IKeyboard keyboard, Key key, int unknown) {
+    var timeSinceLastPress = DateTime.Now - lastKeyPress;
+    if (timeSinceLastPress < TimeSpan.FromSeconds(0.25)) {
+      return;
+    }
+    lastKeyPress = DateTime.Now;
+
+    if (key != Key.F1) {
+      return;
+    }
+
+    debugVisible = !debugVisible;
   }
 
   public void Dispose() {
