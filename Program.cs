@@ -14,6 +14,13 @@ public class Program {
       options.PreferredBitDepth = new Vector4D<int>(0);
     }
 
+    options.API = new GraphicsAPI {
+      API = ContextAPI.OpenGL,
+      Profile = ContextProfile.Core,
+      Version = new APIVersion(4, 6),
+      Flags = ContextFlags.Debug
+    };
+
     using var window = Window.Create(options);
     var renderer = new RenderConfigurator(window);
     renderer.Run();

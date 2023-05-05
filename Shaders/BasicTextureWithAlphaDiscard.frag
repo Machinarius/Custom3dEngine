@@ -9,9 +9,9 @@ out vec4 outColor;
 
 void main() {
   vec4 texColor = texture(uTexture, fUv);
-  if (texColor.a < 0.1) {
-    discard;
-  }
+//  if (texColor.a < 0.1) {
+//    discard;
+//  }
   outColor = texColor;
 }
 

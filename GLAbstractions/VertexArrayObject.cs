@@ -1,3 +1,4 @@
+using Machinarius.Custom3dEngine.DebugUtils;
 using Silk.NET.OpenGL;
 
 namespace Machinarius.Custom3dEngine.GLAbstractions;
@@ -8,10 +9,13 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
   private readonly uint handle;
   private readonly GL gl;
 
-  public VertexArrayObject(GL gl, BufferObject<TVertexType> vertexBuffer, BufferObject<TIndexType>? elementBuffer) {
+  public VertexArrayObject(GL gl, BufferObject<TVertexType> vertexBuffer, BufferObject<TIndexType>? elementBuffer, string? debugName = null) {
     this.gl = gl;
 
     handle = gl.GenVertexArray();
+    if (!string.IsNullOrEmpty(debugName)) {
+      gl.TagAsset(handle, ObjectIdentifier.VertexArray, debugName);
+    }
 
     Console.WriteLine($"Creating VertexArrayObject ${handle}.");
     

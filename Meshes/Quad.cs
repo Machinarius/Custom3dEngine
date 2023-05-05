@@ -5,8 +5,9 @@ namespace Machinarius.Custom3dEngine.Meshes;
 
 public class Quad : IMesh {
   public VertexAttributeDescriptor[] Attributes => new [] {
-    // 3 floats for XYZ coordinates every 3 elements, starting from 0
+    // 3 floats for XYZ coordinates every 5 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 5, 0, VertexAttributePayloadType.Position),
+    // 2 floats for UV coordinates every 5 elements, starting from 3
     new VertexAttributeDescriptor(2, VertexAttribPointerType.Float, 5, 3, VertexAttributePayloadType.TextureCoordinates),
   };
 
@@ -14,10 +15,10 @@ public class Quad : IMesh {
   // coordinates in the range [-1, 1]. For example 1 in the X axis is the right-most pixel
   // of the view-port, and -1 the left-most.
   public float[] Vertices => new[] {
-      0.5f,  0.5f, 0.0f, 1, 0,
-      0.5f, -0.5f, 0.0f, 1, 1,
-     -0.5f, -0.5f, 0.0f, 0, 1,
-     -0.5f,  0.5f, 0.0f, 0, 0
+      0.5f,  0.5f, 0.0f, 1, 1,
+      0.5f, -0.5f, 0.0f, 1, 0,
+     -0.5f, -0.5f, 0.0f, 0, 0,
+     -0.5f,  0.5f, 0.0f, 0, 1
   };
 
   public uint[] Indices => new uint[] {
@@ -35,6 +36,8 @@ public class Quad : IMesh {
   }
 
   public unsafe void Draw() {
+    gl.FrontFace(FrontFaceDirection.CW);
+    gl.CullFace(TriangleFace.Back);
     gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
     //gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
   }

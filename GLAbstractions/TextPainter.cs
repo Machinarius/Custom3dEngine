@@ -31,8 +31,8 @@ public class TextPainter : IDisposable {
     textOptions = BuildTextOptions(window.Size);
     projectionMatrix = BuildProjectionMatrix(window.Size);
     
-    textShader = new ShaderProgram(gl, "HUDElement.vert", "BasicTextureWithAlphaDiscard.frag");
-    glyphTarget = new BufferedMesh(gl, new Quad(gl));
+    textShader = new ShaderProgram(gl, "HUDElement.vert", "BasicTextureWithAlphaDiscard.frag", "HUDText");
+    glyphTarget = new BufferedMesh(gl, new Quad(gl), "GlyphTarget");
     glyphTarget.ActivateVertexAttributes();
   }
 
@@ -88,13 +88,13 @@ public class TextPainter : IDisposable {
           ctx.Fill(Color.Red, glyph)
         );
         
-        glyphTexture = new Simple2DTexture(gl, glyphImage);
+        glyphTexture = new Simple2DTexture(gl, glyphImage, "glyphLetter" + character);
         glyphCache.Add(character, glyphTexture); 
       }
       
       // The glyphTarget mesh renders as a 1px square when ortho-projected
       // so we need to scale it up to the size of the glyph
-      var modelMatrix = Matrix4x4.CreateScale(glyph.Bounds.Width * 3, glyph.Bounds.Height * 3, 1);
+      var modelMatrix = Matrix4x4.CreateScale(glyph.Bounds.Width, glyph.Bounds.Height, 1);
       // Now we need to move the glyph to the correct position in the screen
       modelMatrix *= Matrix4x4.CreateTranslation(
         positionInScreen.X + glyph.Bounds.X, 

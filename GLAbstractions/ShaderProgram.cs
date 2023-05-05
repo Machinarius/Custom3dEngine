@@ -1,3 +1,4 @@
+using Machinarius.Custom3dEngine.DebugUtils;
 using Silk.NET.OpenGL;
 using System.Numerics;
 
@@ -10,7 +11,7 @@ public class ShaderProgram : IDisposable {
   public string VertexFilename { get; }
   public string FragmentFilename { get; }
 
-  public ShaderProgram(GL gl, string vertexFilename, string fragmentFilename) {
+  public ShaderProgram(GL gl, string vertexFilename, string fragmentFilename, string? debugName = null) {
     this.gl = gl;
 
     var vertexId = LoadShader(ShaderType.VertexShader, vertexFilename);
@@ -20,6 +21,10 @@ public class ShaderProgram : IDisposable {
     FragmentFilename = fragmentFilename;
 
     handle = gl.CreateProgram();
+    if (!string.IsNullOrEmpty(debugName)) {
+      gl.TagAsset(handle, ObjectIdentifier.Program, debugName);
+    }
+    
     gl.AttachShader(handle, vertexId);
     gl.AttachShader(handle, fragmentId);
     gl.LinkProgram(handle);
@@ -89,6 +94,8 @@ public class ShaderProgram : IDisposable {
     var shaderPath = Path.Combine(BasePath, "Shaders", filename);
     var shaderText = File.ReadAllText(shaderPath);
     var id = gl.CreateShader(type);
+    gl.TagAsset(id, ObjectIdentifier.Shader, filename);
+    
     gl.ShaderSource(id, shaderText);
     gl.CompileShader(id);
     

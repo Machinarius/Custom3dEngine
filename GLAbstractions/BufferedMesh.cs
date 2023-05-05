@@ -9,18 +9,14 @@ public class BufferedMesh : IDisposable {
 
   public IMesh SourceMesh { get; }
 
-  public BufferedMesh(GL gl, IMesh sourceMesh) {
+  public BufferedMesh(GL gl, IMesh sourceMesh, string? debugName = null) {
     SourceMesh = sourceMesh;
 
     if (sourceMesh.Indices is { Length: > 0 }) {
-      ElementBuffer = new BufferObject<uint>(gl, BufferTargetARB.ElementArrayBuffer, sourceMesh.Indices);
+      ElementBuffer = new BufferObject<uint>(gl, BufferTargetARB.ElementArrayBuffer, sourceMesh.Indices, debugName);
     }
-    VertexBuffer = new BufferObject<float>(gl, BufferTargetARB.ArrayBuffer, sourceMesh.Vertices);
+    VertexBuffer = new BufferObject<float>(gl, BufferTargetARB.ArrayBuffer, sourceMesh.Vertices, debugName);
     VertexArray = new VertexArrayObject<float, uint>(gl, VertexBuffer, ElementBuffer);
-  }
-
-  public BufferedMesh(GL gl, IMesh sourceMesh, string debugTag): this(gl, sourceMesh) {
-    Console.WriteLine("Created BufferedMesh: " + debugTag);
   }
 
   public void ActivateVertexAttributes() {

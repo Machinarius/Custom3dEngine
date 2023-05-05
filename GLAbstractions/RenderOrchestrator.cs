@@ -20,14 +20,14 @@ public class RenderOrchestrator {
 
   public RenderOrchestrator(IWindow window) {
     this.window = window;
-
+      
     gl = window.CreateOpenGL();
+    ConfigureOpenGl();
+
     inputContext = window.CreateInput();
     camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
     scene = new SceneBuilder().GetScene(gl, camera, window);
     headsUpDisplay = new HeadsUpDisplay(window, gl, camera);
-      
-    ConfigureOpenGl();
   }
 
   public void ConfigureEventHandlers() {
@@ -44,6 +44,7 @@ public class RenderOrchestrator {
 
     gl.Enable(GLEnum.CullFace);
     gl.Enable(GLEnum.DepthTest);
+    gl.ClearColor(System.Drawing.Color.Gray);
     //gl?.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);
   }
 
@@ -56,7 +57,6 @@ public class RenderOrchestrator {
   }
 
   private void OnRender(double deltaTime) {
-    gl.ClearColor(System.Drawing.Color.Gray);
     gl.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
     scene.Draw(deltaTime, window.Time);

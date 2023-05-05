@@ -8,14 +8,18 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
   private readonly BufferTargetARB bufferType;
   private readonly GL gl;
 
-  public BufferObject(GL gl, BufferTargetARB bufferType, ReadOnlySpan<TDataType> data) {
+  public BufferObject(GL gl, BufferTargetARB bufferType, ReadOnlySpan<TDataType> data, string? debugName = null) {
     this.gl = gl;
     this.bufferType = bufferType;
     
     Console.WriteLine($"Creating BufferObject ${handle} of type {bufferType}.");
-    
+
     handle = gl.GenBuffer();
     Bind();
+    if (!string.IsNullOrEmpty(debugName)) {
+      gl.TagAsset(handle, ObjectIdentifier.Buffer, debugName);
+    }
+    
     UploadDataToBuffer(data);
     Unbind();
   }
@@ -25,7 +29,6 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
     Console.WriteLine($"Uploading {bufferSize} bytes to buffer {handle} of type {bufferType}.");
     fixed (void* rawData = data) {
       gl.BufferData(bufferType, (nuint) bufferSize, rawData, BufferUsageARB.StaticDraw);
-      gl.EnsureCallSucceeded();
     }
   }
 
