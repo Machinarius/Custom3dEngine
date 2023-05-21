@@ -40,8 +40,8 @@ public class HeadsUpDisplay: IDisposable {
     CalculateModelMatrix(window.Size);
 
     shader = new ShaderProgram(gl, "HUDElement.vert", "White.frag", "HUDElementShader");
-    // quadMesh = new BufferedMesh(gl, new Quad(gl));
-    // quadMesh.ActivateVertexAttributes();
+    quadMesh = new BufferedMesh(gl, new Quad(gl));
+    quadMesh.ActivateVertexAttributes();
 
     textPainter = new TextPainter(window, gl);
   }
@@ -77,19 +77,19 @@ public class HeadsUpDisplay: IDisposable {
   private bool debugVisible;
 
   public void Draw() {
-    // shader.Use();
-    // shader.SetUniform("uProjection", projectionMatrix, false);
-    // shader.SetUniform("uModel", modelMatrix);
-    //
-    // quadMesh.Bind();
-    // quadMesh.Draw();
-    // quadMesh.Unbind();
-    //
-    // if (debugVisible) {
-    //   RenderDebugHud();
-    // }
+    shader.Use();
+    shader.SetUniform("uProjection", projectionMatrix, false);
+    shader.SetUniform("uModel", modelMatrix);
     
-    textPainter.RenderText("H", new Vector2D<float>(0,0));
+    quadMesh.Bind();
+    quadMesh.Draw();
+    quadMesh.Unbind();
+    
+    if (debugVisible) {
+      RenderDebugHud();
+    }
+    
+    textPainter.RenderText("Hello World", new Vector2D<float>(0,0));
   }
 
   private void RenderDebugHud() {

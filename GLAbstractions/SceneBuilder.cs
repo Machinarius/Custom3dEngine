@@ -17,14 +17,14 @@ public class SceneBuilder {
     var lampMesh = new CubeWithNormalsAndUV(gl);
     var lampBufferedMesh = new BufferedMesh(gl, lampMesh, "LampMesh");
     lampBufferedMesh.ActivateVertexAttributes();
-    var lampShader = new ShaderProgram(gl, "IdentityWithMVPAndNormals.vert", "White.frag");
+    var lampShader = new ShaderProgram(gl, "IdentityWithMVPAndNormals.vert", "White.frag", "Lamp");
     scene.Add(new SceneObject(gl, lampBufferedMesh, lampShader) {
       Scale = 0.2f,
       Position = lightPosition
     });
     
     var model = new Model(gl, Path.Combine("Assets", "textured_cube.obj"));
-    var sceneShader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "Lighting.frag");
+    var sceneShader = new ShaderProgram(gl, "IdentityWithMVPAndUvAndNormals.vert", "Lighting.frag", "Scene");
     var meshes = model.Meshes.Select(mesh => new BufferedMesh(gl, mesh, "ModelMesh")).ToArray();
     foreach (var mesh in meshes) {
       mesh.ActivateVertexAttributes();
