@@ -10,8 +10,21 @@ public class Scene : IDisposable {
     contents = new List<SceneObject>();
   }
 
+  public int ObjectCount => contents.Count;
+
   public void Add(SceneObject newObject) {
+    if (newObject == null)
+      throw new ArgumentNullException(nameof(newObject));
+      
     contents.Add(newObject);
+  }
+  
+  public bool Remove(SceneObject objectToRemove) {
+    return contents.Remove(objectToRemove);
+  }
+  
+  public void Clear() {
+    contents.Clear();
   }
 
   public void Draw(double deltaTime, double absoluteTime) {

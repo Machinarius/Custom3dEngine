@@ -1,5 +1,6 @@
 using Machinarius.Custom3dEngine.Entities.Attributes;
 using Machinarius.Custom3dEngine.GLAbstractions;
+using Machinarius.Custom3dEngine.Helpers;
 using Machinarius.Custom3dEngine.Meshes;
 using Silk.NET.OpenGL;
 using System.Numerics;
@@ -67,9 +68,9 @@ public class SceneObject {
     Matrix4x4 modelMatrix;
     if (TransformationBehavior != null) {
       var result = TransformationBehavior.Run(deltaTime, absoluteTime, this);
-      modelMatrix = BuildModelMatrix(result.Position, result.Scale, result.Rotation);
+      modelMatrix = TransformationMath.BuildModelMatrix(result.Position, result.Scale, result.Rotation);
     } else {
-      modelMatrix = BuildModelMatrix(Position, Scale, Rotation);
+      modelMatrix = TransformationMath.BuildModelMatrix(Position, Scale, Rotation);
     }
 
     Shaders.SetUniform("uModel", modelMatrix);
@@ -88,10 +89,4 @@ public class SceneObject {
     Mesh?.Dispose();
   }
 
-  static private Matrix4x4 BuildModelMatrix(Vector3 position, float scale, Quaternion rotation) {
-    return Matrix4x4.Identity * 
-      Matrix4x4.CreateFromQuaternion(rotation) * 
-      Matrix4x4.CreateScale(scale) * 
-      Matrix4x4.CreateTranslation(position);
-  }
 }
