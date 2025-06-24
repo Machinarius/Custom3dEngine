@@ -17,6 +17,10 @@ This is a custom 3D engine built in C# using Silk.NET for OpenGL bindings. The e
 ### Development
 - `dotnet watch run` - Run with file watching for hot reload during development
 
+### Code Formatting
+- `dotnet format` - Format all code files according to EditorConfig policies
+- **IMPORTANT**: Always run `dotnet format` after creating or modifying files to ensure consistent code style
+
 ## Architecture Overview
 
 ### Core Structure
