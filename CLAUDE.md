@@ -21,6 +21,12 @@ This is a custom 3D engine built in C# using Silk.NET for OpenGL bindings. The e
 - `dotnet format` - Format all code files according to EditorConfig policies
 - **IMPORTANT**: Always run `dotnet format` after creating or modifying files to ensure consistent code style
 
+### OpenGL Error Checking
+The codebase includes comprehensive OpenGL error checking for debugging:
+- All OpenGL calls use `gl.EnsureCallSucceeded()` for error detection
+- **Source Generator Option**: The Generators/ folder contains a prototype source generator for automatic GL error checking injection
+- **Future Enhancement**: Classes can be marked with `[GLErrorChecked]` for transparent error checking without manual calls
+
 ## Architecture Overview
 
 ### Core Structure

@@ -69,6 +69,9 @@ public class RenderOrchestrator {
     gl.EnableDebugOutput();
 #endif
 
+    // Set initial viewport
+    gl.Viewport(0, 0, (uint)window.Size.X, (uint)window.Size.Y);
+
     gl.Enable(GLEnum.CullFace);
     gl.Enable(GLEnum.DepthTest);
     //gl?.PolygonMode(GLEnum.FrontAndBack, GLEnum.Line);

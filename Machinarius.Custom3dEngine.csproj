@@ -20,6 +20,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Generators\**" />
+    <Compile Remove="Example_AutomaticGLErrorChecking.cs" />
+    <None Include="Generators\**" />
+    <None Include="Example_AutomaticGLErrorChecking.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Shaders\*.vert" CopyToOutputDirectory="Always" LinkBase="Shaders\" />
     <None Include="Shaders\*.frag" CopyToOutputDirectory="Always" LinkBase="Shaders\" />
     <None Include="Assets\**" CopyToOutputDirectory="Always" />
