@@ -69,4 +69,14 @@ Shaders are in the Shaders/ directory:
 - **Silk.NET**: OpenGL bindings and windowing
 - **Silk.NET.Assimp**: 3D model loading
 - **SixLabors.ImageSharp**: Image/texture loading
+- **Microsoft.Extensions.DependencyInjection**: Dependency injection container
 - **Target Framework**: .NET 7.0
+
+## Dependency Injection
+The engine uses Microsoft's DI container for managing dependencies:
+- **IGraphicsContext**: OpenGL context abstraction
+- **IResourceFactory**: Factory for creating meshes, shaders, textures
+- **SceneObjectFactory**: Factory for creating scene objects with proper dependencies
+- **SceneBuilder**: Creates scenes using the factory pattern
+
+Services are registered in RenderOrchestrator constructor and resolved automatically.

@@ -1,5 +1,6 @@
 using Machinarius.Custom3dEngine.DebugUtils;
 using Machinarius.Custom3dEngine.Entities;
+using Microsoft.Extensions.DependencyInjection;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
@@ -10,7 +11,7 @@ namespace Machinarius.Custom3dEngine.GLAbstractions;
 
 public class RenderOrchestrator {
   private readonly IWindow window;
-  private readonly EngineContainer container;
+  private readonly ServiceProvider serviceProvider;
 
   private readonly GL gl;
   private readonly IInputContext inputContext;
@@ -26,18 +27,20 @@ public class RenderOrchestrator {
     inputContext = window.CreateInput();
     camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
     
-    // Setup dependency injection container
-    container = new EngineContainer();
+    // Setup Microsoft dependency injection container
+    var services = new ServiceCollection();
+    
+    // Register core services
     var graphicsContext = new OpenGLContext(gl);
-    var resourceFactory = new GraphicsResourceFactory(graphicsContext);
-    var objectFactory = new SceneObjectFactory(graphicsContext, resourceFactory);
-    var sceneBuilder = new SceneBuilder(objectFactory);
+    services.AddSingleton<IGraphicsContext>(graphicsContext);
+    services.AddSingleton<IResourceFactory, GraphicsResourceFactory>();
+    services.AddSingleton<SceneObjectFactory>();
+    services.AddSingleton<SceneBuilder>();
     
-    container.RegisterSingleton<IGraphicsContext>(graphicsContext);
-    container.RegisterSingleton<IResourceFactory>(resourceFactory);
-    container.RegisterSingleton<SceneObjectFactory>(objectFactory);
-    container.RegisterSingleton<SceneBuilder>(sceneBuilder);
+    serviceProvider = services.BuildServiceProvider();
     
+    // Get scene builder and create scene
+    var sceneBuilder = serviceProvider.GetRequiredService<SceneBuilder>();
     scene = sceneBuilder.GetScene(camera, window);
     headsUpDisplay = new HeadsUpDisplay(window, gl, camera);
       
@@ -83,7 +86,7 @@ public class RenderOrchestrator {
   }
 
   private void OnClose() {
-    container?.Dispose();
+    serviceProvider?.Dispose();
     scene?.Dispose();
     headsUpDisplay?.Dispose();
     inputContext?.Dispose();
