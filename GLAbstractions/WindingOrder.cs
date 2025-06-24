@@ -1,4 +1,4 @@
-namespace Machinarius.Custom3dEngine.GLAbstractions; 
+namespace Machinarius.Custom3dEngine.GLAbstractions;
 
 public enum WindingOrder {
   Clockwise,

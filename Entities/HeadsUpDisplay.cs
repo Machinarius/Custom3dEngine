@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace Machinarius.Custom3dEngine.Entities;
 
-public class HeadsUpDisplay: IDisposable {
+public class HeadsUpDisplay : IDisposable {
   private readonly IWindow window;
   private readonly Camera camera;
   private readonly BufferedMesh quadMesh;
@@ -29,7 +29,7 @@ public class HeadsUpDisplay: IDisposable {
     this.inputContext = inputContext ?? throw new ArgumentNullException(nameof(inputContext));
 
     ConfigureKeyboardListeners();
-    
+
     imGuiController = new ImGuiController(gl, window, inputContext);
     imGuiController.MakeCurrent();
 
@@ -76,7 +76,7 @@ public class HeadsUpDisplay: IDisposable {
     shader.Use();
     shader.SetUniform("uProjection", projectionMatrix, false);
     shader.SetUniform("uModel", modelMatrix);
-    
+
     quadMesh.Bind();
     quadMesh.Draw();
 
@@ -87,12 +87,12 @@ public class HeadsUpDisplay: IDisposable {
 
   private void RenderDebugHud() {
     // https://github.com/ImGuiNET/ImGui.NET/blob/master/src/ImGui.NET.SampleProgram/Program.cs
-    ImGui.Begin("Debug", 
+    ImGui.Begin("Debug",
       ImGuiWindowFlags.AlwaysAutoResize |
       ImGuiWindowFlags.NoDecoration
     );
     ImGui.Text($"Camera position: {camera.Position}");
-    
+
     imGuiController.Render();
   }
 
@@ -104,7 +104,7 @@ public class HeadsUpDisplay: IDisposable {
 
     mainKeyboard.KeyDown += OnKeyDown;
   }
-  
+
   private DateTime lastKeyPress = DateTime.Now;
 
   private void OnKeyDown(IKeyboard keyboard, Key key, int unknown) {

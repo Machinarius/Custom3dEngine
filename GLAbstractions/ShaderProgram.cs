@@ -59,7 +59,7 @@ public class ShaderProgram : IDisposable {
   }
 
   public unsafe void SetUniform(string name, Matrix4x4 value, bool transpose = false) {
-    gl.UniformMatrix4(GetUniformLocation(name), 1, transpose, (float*) &value);
+    gl.UniformMatrix4(GetUniformLocation(name), 1, transpose, (float*)&value);
   }
 
   public void SetUniform(string name, Vector3 value) {
@@ -91,7 +91,7 @@ public class ShaderProgram : IDisposable {
     var id = gl.CreateShader(type);
     gl.ShaderSource(id, shaderText);
     gl.CompileShader(id);
-    
+
     var errorLog = gl.GetShaderInfoLog(id);
     if (!string.IsNullOrEmpty(errorLog)) {
       throw new InvalidOperationException($"Could not compile {type} shader '{filename}'\n{errorLog}");

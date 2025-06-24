@@ -2,8 +2,8 @@ using Silk.NET.OpenGL;
 
 namespace Machinarius.Custom3dEngine.GLAbstractions;
 
-public class VertexArrayObject<TVertexType, TIndexType> : IDisposable 
-    where TVertexType : unmanaged 
+public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
+    where TVertexType : unmanaged
     where TIndexType : unmanaged {
   private readonly uint handle;
   private readonly GL gl;
@@ -14,7 +14,7 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
     handle = gl.GenVertexArray();
 
     Console.WriteLine($"Creating VertexArrayObject ${handle}.");
-    
+
     // Bind these buffers to this VAO
     Bind();
     vertexBuffer.Bind();
@@ -45,21 +45,21 @@ public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
     </param>
   */
   public unsafe void VertexAttribPointer(
-    uint index, 
-    int size, 
-    VertexAttribPointerType type, 
-    uint stride, 
+    uint index,
+    int size,
+    VertexAttribPointerType type,
+    uint stride,
     int offset
   ) {
     var elementSize = (uint)sizeof(TVertexType);
     Console.WriteLine($"Activating vertex attribute at location {index}, with {size} elements, every {stride} elements, starting from {offset}, with element size of {elementSize} bytes.");
-    
+
     Bind();
     gl.EnableVertexAttribArray(index);
     gl.VertexAttribPointer(index, size, type, false, stride * elementSize, (void*)(offset * elementSize));
     Unbind();
   }
-  
+
   public void Dispose() {
     // Only dispose this array because the buffers could be used for other arrays
     gl.DeleteVertexArray(handle);

@@ -4,7 +4,7 @@ using Silk.NET.OpenGL;
 namespace Machinarius.Custom3dEngine.Meshes;
 
 public class Quad : IMesh {
-  public VertexAttributeDescriptor[] Attributes => new [] {
+  public VertexAttributeDescriptor[] Attributes => new[] {
     // 3 floats for XYZ coordinates every 3 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 3, 0, VertexAttributePayloadType.Position),
   };
@@ -34,7 +34,7 @@ public class Quad : IMesh {
   }
 
   public unsafe void Draw() {
-    gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
+    gl.DrawElements(PrimitiveType.Triangles, (uint)Indices.Length, DrawElementsType.UnsignedInt, null);
     //gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
   }
 

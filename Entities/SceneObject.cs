@@ -16,7 +16,7 @@ public class SceneObject {
   public BufferedMesh Mesh { get; }
   public ShaderProgram Shaders { get; }
 
-  private readonly string[] RequiredUniforms = new [] {
+  private readonly string[] RequiredUniforms = new[] {
     "uModel",
     "uView",
     "uProjection"
@@ -32,8 +32,8 @@ public class SceneObject {
 
     Mesh = mesh ?? throw new ArgumentNullException(nameof(mesh));
     Shaders = shaders ?? throw new ArgumentNullException(nameof(shaders));
-    
-    var shaderHasAllRequiredUniforms = 
+
+    var shaderHasAllRequiredUniforms =
       RequiredUniforms.Aggregate(true, (allPresent, uName) => allPresent && shaders.HasUniform(uName));
     if (!shaderHasAllRequiredUniforms) {
       throw new InvalidOperationException("The shader you wish to attach to this scene object must define the uModel, uView and uProjection uniforms");
@@ -54,17 +54,17 @@ public class SceneObject {
     };
     _graphicsContext.GL.FrontFace(windingFlag);
     _graphicsContext.GL.CullFace(faceFlag);
-    
+
     Mesh.Bind();
     Shaders.Use();
 
     Mesh.SourceMesh.DiffuseTexture?.Bind(TextureUnit.Texture0);
     Mesh.SourceMesh.SpecularTexture?.Bind(TextureUnit.Texture1);
-    
+
     foreach (var attr in attributes) {
       attr.WriteToShader(Shaders, deltaTime, absoluteTime);
     }
-    
+
     Matrix4x4 modelMatrix;
     if (TransformationBehavior != null) {
       var result = TransformationBehavior.Run(deltaTime, absoluteTime, this);
@@ -79,7 +79,7 @@ public class SceneObject {
 
     Shaders.Validate();
     Mesh.Draw();
-    
+
     Mesh.Unbind();
     Mesh.SourceMesh.DiffuseTexture?.Unbind();
   }

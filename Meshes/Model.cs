@@ -34,7 +34,7 @@ public class Model {
     );
     var scene = assimp.ImportFile(path, loadFlags);
 
-    if (scene == null || scene->MRootNode == null || scene->MFlags == Assimp.SceneFlagsIncomplete) { 
+    if (scene == null || scene->MRootNode == null || scene->MFlags == Assimp.SceneFlagsIncomplete) {
       var errorMessage = SilkMarshal.PtrToString((nint)assimp.GetErrorString());
       throw new InvalidOperationException($"Could not load model from '{path}'\n{errorMessage}");
     }
@@ -101,7 +101,7 @@ public class Model {
 
     var diffuse = diffuseTextures.FirstOrDefault();
     var specular = specularTextures.FirstOrDefault();
-    
+
     var meshData = BuildMeshData(vertices);
     var result = new DataMesh(gl, meshData.Attributes, meshData.Vertices, indices.ToArray(), diffuse, specular);
     meshes.Add(result);
@@ -136,7 +136,7 @@ public class Model {
   }
 
   private record MeshData(float[] Vertices, VertexAttributeDescriptor[] Attributes);
-  
+
   static private MeshData BuildMeshData(Vertex[] vertices) {
     uint attributeStride = 3;
 
@@ -154,12 +154,12 @@ public class Model {
     };
 
     if (vertices[0].Normal.HasValue) {
-      attributes.Add(new (3, VertexAttribPointerType.Float, attributeStride, 3, VertexAttributePayloadType.Normal));
+      attributes.Add(new(3, VertexAttribPointerType.Float, attributeStride, 3, VertexAttributePayloadType.Normal));
     }
 
     if (vertices[0].UvCoordinates.HasValue) {
       var offset = vertices[0].Normal.HasValue ? 6 : 3;
-      attributes.Add(new (2, VertexAttribPointerType.Float, attributeStride, offset, VertexAttributePayloadType.TextureCoordinates));
+      attributes.Add(new(2, VertexAttribPointerType.Float, attributeStride, offset, VertexAttributePayloadType.TextureCoordinates));
     }
 
     var vertexData = new float[vertices.Length * attributeStride];
@@ -202,7 +202,7 @@ public class Model {
     if (!System.IO.File.Exists(resolvedPath)) {
       throw new InvalidOperationException($"Could not find texture '{texturePath}'");
     }
-    
+
     return resolvedPath;
   }
 }

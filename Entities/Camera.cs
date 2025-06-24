@@ -30,13 +30,13 @@ public class Camera : IDisposable {
     Position, Position + Front, Up
   );
 
-  private float ViewportAspectRatio => window.Size.X / (float) window.Size.Y;
+  private float ViewportAspectRatio => window.Size.X / (float)window.Size.Y;
 
   public Matrix4x4 ProjectionMatrix => Matrix4x4.CreatePerspectiveFieldOfView(
     MathHelper.DegreesToRadians(Zoom), ViewportAspectRatio, NearPlaneDistance, FarPlaneDistance
   );
 
-  public Camera(IWindow window, IInputContext input) : 
+  public Camera(IWindow window, IInputContext input) :
     this(window, input, new Vector3(0, 0, 3), Vector3.UnitY, new Vector3(0, 0, -1)) {
     // Start a few units away from the center of the scene so the contents can be seen
   }
@@ -77,7 +77,7 @@ public class Camera : IDisposable {
   }
 
   public void Update(double deltaTime) {
-    var displacement = (float) deltaTime * MoveSpeed;
+    var displacement = (float)deltaTime * MoveSpeed;
 
     if (primaryKeyboard == null) {
       return;

@@ -42,7 +42,7 @@ public class Simple2DTexture : IDisposable {
   private unsafe void LoadTextureFromFile(string filePath) {
     using var image = Image.Load<Rgba32>(filePath);
     //Reserve enough memory from the gpu for the whole image
-    gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint) image.Width, (uint) image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null);
+    gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba8, (uint)image.Width, (uint)image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, null);
     image.ProcessPixelRows(dataReader => {
       for (var y = 0; y < dataReader.Height; y++) {
         //ImageSharp 2 does not store images in contiguous memory by default, so we must send the image row by row
@@ -57,17 +57,17 @@ public class Simple2DTexture : IDisposable {
 
   private unsafe void LoadTextureFromRawData(ReadOnlySpan<byte> rawTextureData, uint width, uint height) {
     fixed (void* dataPointer = &rawTextureData[0]) {
-      gl.TexImage2D(TextureTarget.Texture2D, 0, (int) InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, dataPointer);
+      gl.TexImage2D(TextureTarget.Texture2D, 0, (int)InternalFormat.Rgba, width, height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, dataPointer);
     }
     SetParameters();
   }
 
   private void SetParameters() {
     //Setting some texture perameters so the texture behaves as expected.
-    gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) GLEnum.ClampToEdge);
-    gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) GLEnum.ClampToEdge);
-    gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) GLEnum.LinearMipmapLinear);
-    gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) GLEnum.Linear);
+    gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)GLEnum.ClampToEdge);
+    gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)GLEnum.ClampToEdge);
+    gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)GLEnum.LinearMipmapLinear);
+    gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)GLEnum.Linear);
     gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
     gl.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, 8);
     //Generating mipmaps.

@@ -4,14 +4,14 @@ using Silk.NET.OpenGL;
 namespace Machinarius.Custom3dEngine.Meshes;
 
 public class Cube : IMesh {
-  public VertexAttributeDescriptor[] Attributes => new [] {
+  public VertexAttributeDescriptor[] Attributes => new[] {
     // 3 floats for XYZ coordinates every 6 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 6, 0, VertexAttributePayloadType.Position),
     // 3 floats for XYZ of the normal every 6 elements, starting from 3
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 6, 3, VertexAttributePayloadType.Normal),
   };
 
-  public float[] Vertices => new [] {
+  public float[] Vertices => new[] {
     //X    Y      Z       Normals
     -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
       0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -73,5 +73,5 @@ public class Cube : IMesh {
     gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
   }
 
-  public void Dispose() {}
+  public void Dispose() { }
 }

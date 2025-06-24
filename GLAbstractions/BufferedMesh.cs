@@ -19,7 +19,7 @@ public class BufferedMesh : IDisposable {
     VertexArray = new VertexArrayObject<float, uint>(gl, VertexBuffer, ElementBuffer);
   }
 
-  public BufferedMesh(GL gl, IMesh sourceMesh, string debugTag): this(gl, sourceMesh) {
+  public BufferedMesh(GL gl, IMesh sourceMesh, string debugTag) : this(gl, sourceMesh) {
     Console.WriteLine("Created BufferedMesh: " + debugTag);
   }
 
@@ -41,7 +41,7 @@ public class BufferedMesh : IDisposable {
     ElementBuffer?.Unbind();
   }
 
-  public void Draw() { 
+  public void Draw() {
     SourceMesh.Draw();
   }
 

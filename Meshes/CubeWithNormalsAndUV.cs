@@ -6,7 +6,7 @@ using System.Text.Json;
 namespace Machinarius.Custom3dEngine.Meshes;
 
 public class CubeWithNormalsAndUV : IMesh {
-  public VertexAttributeDescriptor[] Attributes => new [] {
+  public VertexAttributeDescriptor[] Attributes => new[] {
     // 3 floats for XYZ coordinates every 8 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 8, 0, VertexAttributePayloadType.Position),
     // 3 floats for XYZ of the normal every 6 elements, starting from 3
@@ -15,34 +15,34 @@ public class CubeWithNormalsAndUV : IMesh {
     new VertexAttributeDescriptor(2, VertexAttribPointerType.Float, 8, 6, VertexAttributePayloadType.TextureCoordinates)
   };
 
-  public float[] Vertices => new [] {
-    1f,1f,-1f,		0f,1f,0f,		  1f,1f, // Vertex 0, Facing Y 
-    -1f,1f,-1f,		0f,1f,0f,		  0f,1f, // Vertex 1, Facing Y
-    -1f,1f,1f,		0f,1f,0f,		  0f,0f, // Vertex 2, Facing Y
-    1f,1f,1f,		  0f,1f,0f,		  1f,0f, // Vertex 3, Facing Y
-    1f,-1f,1f,		0f,0f,1f,		  1f,0f, // Vertex 4, Facing Z
-    1f,1f,1f,		  0f,0f,1f,		  1f,1f, // Vertex 3, Facing Z
-    -1f,1f,1f,		0f,-0f,1f,		0f,1f, // Vertex 2, Facing Z
-    -1f,-1f,1f,		-0f,-0f,1f,		0f,0f, // Vertex 5, Facing Z
-    -1f,-1f,1f,		-1f,-0f,0f,		0f,0f, // Vertex 5, Facing -X
-    -1f,1f,1f,		-1f,0f,0f,		0f,1f, // Vertex 2, Facing -X
-    -1f,1f,-1f,		-1f,0f,0f,		1f,1f, // Vertex 1, Facing -X
-    -1f,-1f,-1f,	-1f,0f,0f,		1f,0f, // Vertex 6, Facing -X
-    -1f,-1f,-1f,	0f,-1f,0f,		0f,1f, // Vertex 6, Facing -Y
-    1f,-1f,-1f,		0f,-1f,0f,		1f,1f, // Vertex 7, Facing -Y
-    1f,-1f,1f,		0f,-1f,0f,		1f,0f, // Vertex 4, Facing -Y
-    -1f,-1f,1f,		0f,-1f,0f,		0f,0f, // Vertex 5, Facing -Y
-    1f,-1f,-1f,		1f,0f,0f,		  1f,0f, // Vertex 7, Facing X
-    1f,1f,-1f,		1f,0f,0f,		  1f,1f, // Vertex 0, Facing X
-    1f,1f,1f,		  1f,0f,0f,		  0f,1f, // Vertex 3, Facing X
-    1f,-1f,1f,		1f,0f,0f,		  0f,0f, // Vertex 4, Facing X
-    -1f,-1f,-1f,	0f,0f,-1f,		0f,0f, // Vertex 6, Facing -Z
-    -1f,1f,-1f,		0f,0f,-1f,		0f,1f, // Vertex 1, Facing -Z
-    1f,1f,-1f,		0f,0f,-1f,		1f,1f, // Vertex 0, Facing -Z
+  public float[] Vertices => new[] {
+    1f,1f,-1f,    0f,1f,0f,     1f,1f, // Vertex 0, Facing Y 
+    -1f,1f,-1f,   0f,1f,0f,     0f,1f, // Vertex 1, Facing Y
+    -1f,1f,1f,    0f,1f,0f,     0f,0f, // Vertex 2, Facing Y
+    1f,1f,1f,     0f,1f,0f,     1f,0f, // Vertex 3, Facing Y
+    1f,-1f,1f,    0f,0f,1f,     1f,0f, // Vertex 4, Facing Z
+    1f,1f,1f,     0f,0f,1f,     1f,1f, // Vertex 3, Facing Z
+    -1f,1f,1f,    0f,-0f,1f,    0f,1f, // Vertex 2, Facing Z
+    -1f,-1f,1f,   -0f,-0f,1f,   0f,0f, // Vertex 5, Facing Z
+    -1f,-1f,1f,   -1f,-0f,0f,   0f,0f, // Vertex 5, Facing -X
+    -1f,1f,1f,    -1f,0f,0f,    0f,1f, // Vertex 2, Facing -X
+    -1f,1f,-1f,   -1f,0f,0f,    1f,1f, // Vertex 1, Facing -X
+    -1f,-1f,-1f,  -1f,0f,0f,    1f,0f, // Vertex 6, Facing -X
+    -1f,-1f,-1f,  0f,-1f,0f,    0f,1f, // Vertex 6, Facing -Y
+    1f,-1f,-1f,   0f,-1f,0f,    1f,1f, // Vertex 7, Facing -Y
+    1f,-1f,1f,    0f,-1f,0f,    1f,0f, // Vertex 4, Facing -Y
+    -1f,-1f,1f,   0f,-1f,0f,    0f,0f, // Vertex 5, Facing -Y
+    1f,-1f,-1f,   1f,0f,0f,     1f,0f, // Vertex 7, Facing X
+    1f,1f,-1f,    1f,0f,0f,     1f,1f, // Vertex 0, Facing X
+    1f,1f,1f,     1f,0f,0f,     0f,1f, // Vertex 3, Facing X
+    1f,-1f,1f,    1f,0f,0f,     0f,0f, // Vertex 4, Facing X
+    -1f,-1f,-1f,  0f,0f,-1f,    0f,0f, // Vertex 6, Facing -Z
+    -1f,1f,-1f,   0f,0f,-1f,    0f,1f, // Vertex 1, Facing -Z
+    1f,1f,-1f,    0f,0f,-1f,    1f,1f, // Vertex 0, Facing -Z
     1f,-1f,-1f,   0f,0f,-1f,    1f,0f  // Vertex 7, Facing -Z
   };
 
-  public uint[] Indices => new uint[] { 
+  public uint[] Indices => new uint[] {
     0,1,2,    // +Y Face, -Z Triangle, v0, v1, v2
     0,2,3,    // +Y Face, +Z Triangle, v0, v2, v3
     4,5,6,    // +Z Face, -Y Triangle, v4, v3, v2
@@ -73,10 +73,10 @@ public class CubeWithNormalsAndUV : IMesh {
   public unsafe void Draw() {
     texture.Bind(TextureUnit.Texture0);
     specularMap.Bind(TextureUnit.Texture1);
-    
+
     //gl.DrawArrays(PrimitiveType.Triangles, 0, (uint)Vertices.Length);
     gl.DrawElements(PrimitiveType.Triangles, (uint)Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 
-  public void Dispose() {}
+  public void Dispose() { }
 }

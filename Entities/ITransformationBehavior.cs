@@ -4,8 +4,8 @@ namespace Machinarius.Custom3dEngine.Entities;
 
 public interface ITransformationBehavior {
   public class Result {
-    public Vector3 Position { get; } 
-    public float Scale { get; } 
+    public Vector3 Position { get; }
+    public float Scale { get; }
     public Quaternion Rotation { get; }
 
     public Result(Vector3 position, float scale, Quaternion rotation) {

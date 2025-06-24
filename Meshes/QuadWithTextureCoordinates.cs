@@ -6,18 +6,18 @@ namespace Machinarius.Custom3dEngine.Meshes;
 public class QuadWithTextureCoordinates : IMesh {
   private readonly Simple2DTexture texture;
 
-  public VertexAttributeDescriptor[] Attributes => new [] {
+  public VertexAttributeDescriptor[] Attributes => new[] {
     // 3 floats for XYZ coordinates every 5 elements, starting from 0
     new VertexAttributeDescriptor(3, VertexAttribPointerType.Float, 5, 0, VertexAttributePayloadType.Position),
     // 2 floats for UV coordinates every 5 elements, starting from the third element
     new VertexAttributeDescriptor(4, VertexAttribPointerType.Float, 5, 3, VertexAttributePayloadType.TextureCoordinates),
   };
-  
+
   public float[] Vertices => new[] {
     //X     Y      Z     U  V
-      0.5f,  0.5f, 0.0f, 1, 0, 
-      0.5f, -0.5f, 0.0f, 1, 1, 
-     -0.5f, -0.5f, 0.0f, 0, 1, 
+      0.5f,  0.5f, 0.0f, 1, 0,
+      0.5f, -0.5f, 0.0f, 1, 1,
+     -0.5f, -0.5f, 0.0f, 0, 1,
      -0.5f,  0.5f, 0.5f, 0, 0
   };
 
@@ -38,7 +38,7 @@ public class QuadWithTextureCoordinates : IMesh {
 
   public unsafe void Draw() {
     texture.Bind(TextureUnit.Texture0);
-    gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
+    gl.DrawElements(PrimitiveType.Triangles, (uint)Indices.Length, DrawElementsType.UnsignedInt, null);
   }
 
   public void Dispose() {

@@ -11,9 +11,9 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
   public BufferObject(GL gl, BufferTargetARB bufferType, ReadOnlySpan<TDataType> data) {
     this.gl = gl;
     this.bufferType = bufferType;
-    
+
     Console.WriteLine($"Creating BufferObject ${handle} of type {bufferType}.");
-    
+
     handle = gl.GenBuffer();
     Bind();
     UploadDataToBuffer(data);
@@ -24,7 +24,7 @@ public class BufferObject<TDataType> : IDisposable where TDataType : unmanaged {
     var bufferSize = data.Length * sizeof(TDataType);
     Console.WriteLine($"Uploading {bufferSize} bytes to buffer {handle} of type {bufferType}.");
     fixed (void* rawData = data) {
-      gl.BufferData(bufferType, (nuint) bufferSize, rawData, BufferUsageARB.StaticDraw);
+      gl.BufferData(bufferType, (nuint)bufferSize, rawData, BufferUsageARB.StaticDraw);
       gl.EnsureCallSucceeded();
     }
   }
