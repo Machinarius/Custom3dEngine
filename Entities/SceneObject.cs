@@ -7,7 +7,7 @@ using System.Numerics;
 namespace Machinarius.Custom3dEngine.Entities;
 
 public class SceneObject {
-  private readonly GL gl;
+  private readonly IGraphicsContext _graphicsContext;
   public Vector3 Position { get; set; } = new Vector3(0, 0, 0);
   public float Scale { get; set; } = 1f;
   public Quaternion Rotation { get; set; } = Quaternion.Identity;
@@ -25,8 +25,8 @@ public class SceneObject {
 
   private readonly List<IObjectAttribute> attributes;
 
-  public SceneObject(GL gl, BufferedMesh mesh, ShaderProgram shaders) {
-    this.gl = gl ?? throw new ArgumentNullException(nameof(gl));
+  public SceneObject(IGraphicsContext graphicsContext, BufferedMesh mesh, ShaderProgram shaders) {
+    _graphicsContext = graphicsContext ?? throw new ArgumentNullException(nameof(graphicsContext));
     attributes = new List<IObjectAttribute>();
 
     Mesh = mesh ?? throw new ArgumentNullException(nameof(mesh));
@@ -51,8 +51,8 @@ public class SceneObject {
           "Invalid winding order for mesh: " + Mesh.SourceMesh.WindingOrder
         )
     };
-    gl.FrontFace(windingFlag);
-    gl.CullFace(faceFlag);
+    _graphicsContext.GL.FrontFace(windingFlag);
+    _graphicsContext.GL.CullFace(faceFlag);
     
     Mesh.Bind();
     Shaders.Use();

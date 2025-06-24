@@ -10,6 +10,7 @@ namespace Machinarius.Custom3dEngine.GLAbstractions;
 
 public class RenderOrchestrator {
   private readonly IWindow window;
+  private readonly EngineContainer container;
 
   private readonly GL gl;
   private readonly IInputContext inputContext;
@@ -24,7 +25,20 @@ public class RenderOrchestrator {
     gl = window.CreateOpenGL();
     inputContext = window.CreateInput();
     camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
-    scene = new SceneBuilder().GetScene(gl, camera, window);
+    
+    // Setup dependency injection container
+    container = new EngineContainer();
+    var graphicsContext = new OpenGLContext(gl);
+    var resourceFactory = new GraphicsResourceFactory(graphicsContext);
+    var objectFactory = new SceneObjectFactory(graphicsContext, resourceFactory);
+    var sceneBuilder = new SceneBuilder(objectFactory);
+    
+    container.RegisterSingleton<IGraphicsContext>(graphicsContext);
+    container.RegisterSingleton<IResourceFactory>(resourceFactory);
+    container.RegisterSingleton<SceneObjectFactory>(objectFactory);
+    container.RegisterSingleton<SceneBuilder>(sceneBuilder);
+    
+    scene = sceneBuilder.GetScene(camera, window);
     headsUpDisplay = new HeadsUpDisplay(window, gl, camera);
       
     ConfigureOpenGl();
@@ -69,6 +83,10 @@ public class RenderOrchestrator {
   }
 
   private void OnClose() {
-    // TODO
+    container?.Dispose();
+    scene?.Dispose();
+    headsUpDisplay?.Dispose();
+    inputContext?.Dispose();
+    gl?.Dispose();
   }
 }
