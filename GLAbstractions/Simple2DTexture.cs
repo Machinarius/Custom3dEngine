@@ -1,5 +1,7 @@
 using Machinarius.Custom3dEngine.DebugUtils;
 using Silk.NET.OpenGL;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Machinarius.Custom3dEngine.GLAbstractions;
 

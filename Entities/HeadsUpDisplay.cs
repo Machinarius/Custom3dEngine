@@ -19,18 +19,18 @@ public class HeadsUpDisplay: IDisposable {
   private readonly IInputContext inputContext;
 
   // https://www.mbsoftworks.sk/tutorials/opengl4/009-orthographic-2D-projection/
-  public HeadsUpDisplay(IWindow window, GL gl, Camera camera) {
+  public HeadsUpDisplay(IWindow window, GL gl, Camera camera, IInputContext inputContext) {
     if (gl is null) {
       throw new ArgumentNullException(nameof(gl));
     }
 
     this.window = window ?? throw new ArgumentNullException(nameof(window));
     this.camera = camera ?? throw new ArgumentNullException(nameof(camera));
+    this.inputContext = inputContext ?? throw new ArgumentNullException(nameof(inputContext));
 
-    inputContext = window.CreateInput();
     ConfigureKeyboardListeners();
     
-    imGuiController = new ImGuiController(gl, window, window.CreateInput());
+    imGuiController = new ImGuiController(gl, window, inputContext);
     imGuiController.MakeCurrent();
 
     window.Resize += OnWindowResize;

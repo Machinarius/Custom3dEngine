@@ -25,7 +25,6 @@ public class RenderOrchestrator {
 
     gl = window.CreateOpenGL();
     inputContext = window.CreateInput();
-    camera = new Camera(window, inputContext, Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
     
     // Setup Microsoft dependency injection container
     var services = new ServiceCollection();
@@ -33,16 +32,27 @@ public class RenderOrchestrator {
     // Register core services
     var graphicsContext = new OpenGLContext(gl);
     services.AddSingleton<IGraphicsContext>(graphicsContext);
+    services.AddSingleton<IInputContext>(inputContext);
+    services.AddSingleton<IWindow>(window);
+    services.AddSingleton<GL>(gl);
     services.AddSingleton<IResourceFactory, GraphicsResourceFactory>();
     services.AddSingleton<SceneObjectFactory>();
     services.AddSingleton<SceneBuilder>();
+    services.AddSingleton<HeadsUpDisplay>();
     
+    serviceProvider = services.BuildServiceProvider();
+    
+    // Create camera using DI-provided input context
+    camera = new Camera(window, serviceProvider.GetRequiredService<IInputContext>(), Vector3.UnitZ * 6, Vector3.UnitY, Vector3.UnitZ * -1);
+    
+    // Register camera for HeadsUpDisplay
+    services.AddSingleton<Camera>(camera);
     serviceProvider = services.BuildServiceProvider();
     
     // Get scene builder and create scene
     var sceneBuilder = serviceProvider.GetRequiredService<SceneBuilder>();
     scene = sceneBuilder.GetScene(camera, window);
-    headsUpDisplay = new HeadsUpDisplay(window, gl, camera);
+    headsUpDisplay = serviceProvider.GetRequiredService<HeadsUpDisplay>();
       
     ConfigureOpenGl();
   }

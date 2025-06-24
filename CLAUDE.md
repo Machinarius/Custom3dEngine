@@ -62,7 +62,7 @@ Shaders are in the Shaders/ directory:
 
 ### Asset Pipeline
 - Assets/ directory contains textures and 3D models
-- global.json specifies .NET 7.0 SDK
+- global.json specifies .NET 9.0 SDK
 - Project file copies shaders and assets to output directory
 
 ## Dependencies
@@ -70,7 +70,7 @@ Shaders are in the Shaders/ directory:
 - **Silk.NET.Assimp**: 3D model loading
 - **SixLabors.ImageSharp**: Image/texture loading
 - **Microsoft.Extensions.DependencyInjection**: Dependency injection container
-- **Target Framework**: .NET 7.0
+- **Target Framework**: .NET 9.0
 
 ## Dependency Injection
 The engine uses Microsoft's DI container for managing dependencies:
